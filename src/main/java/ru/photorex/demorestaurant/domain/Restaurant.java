@@ -29,6 +29,8 @@ public class Restaurant {
     @Column(name = "updated_at")
     private LocalDate updatedAt;
 
-   @OneToMany
+   @OneToMany(fetch = FetchType.LAZY,
+              cascade = CascadeType.ALL)
+   @JoinColumn(name = "restaurant_id")
     private List<Dish> dishes;
 }

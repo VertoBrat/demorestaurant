@@ -23,7 +23,9 @@ import ru.photorex.demorestaurant.to.RestaurantResource;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -103,7 +105,14 @@ public class RestaurantController {
                             .collect(Collectors.toList());
             throw new DataNotValidException(errorFields);
         }
+        if (Objects.isNull(restaurant.getDishes())) {
+            restaurant.setDishes(new ArrayList<>());
+            restaurantRepo.save(restaurant);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
         restaurantRepo.save(restaurant);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

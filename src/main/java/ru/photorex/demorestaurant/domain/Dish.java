@@ -29,7 +29,7 @@ public class Dish {
     @Column(name = "created_at")
     private LocalDate createdAt;
 
-    @ManyToOne(targetEntity = Restaurant.class,fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Restaurant.class)
     private Restaurant restaurant;
 
     @PrePersist

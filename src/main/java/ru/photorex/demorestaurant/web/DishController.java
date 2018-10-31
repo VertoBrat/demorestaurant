@@ -61,6 +61,23 @@ public class DishController {
         dish.setRestaurant(restaurant);
         dishRepo.save(dish);
 
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Dish dish) {
+        Dish oldDish = dishRepo.findById(id).orElseThrow(()->new DishNotFoundException(id));
+        if (dish.getName()!=null)
+            oldDish.setName(dish.getName());
+        if (dish.getPrice()!=null)
+            oldDish.setPrice(dish.getPrice());
+        if (dish.getCreatedAt()!=null)
+            oldDish.setCreatedAt(dish.getCreatedAt());
+        if (dish.getRestaurant()!=null)
+            oldDish.setRestaurant(dish.getRestaurant());
+
+        dishRepo.save(oldDish);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

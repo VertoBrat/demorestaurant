@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static ru.photorex.demorestaurant.util.DataValidation.*;
 
 @RestController
 @RequestMapping(path = "/api/restaurants", produces = "application/json")
@@ -44,18 +45,13 @@ public class RestaurantController {
     @GetMapping
     public Resources<RestaurantResource> lastAll() {
 
-
-
-        List<Restaurant> restaurants =// restaurantRepo.find(LocalDate.now());
-
+        List<Restaurant> restaurants = //restaurantRepo.find(LocalDate.now());
                 restaurantRepo.findByUpdatedAt(LocalDate.now()).stream()
-                        .peek(r->{
-                             List<Dish> dishes = dishRepo.findByRestaurantAndCreatedAt(r, LocalDate.now());
-                             r.setDishes(dishes);
-                             })
-                        .collect(Collectors.toList());
-
-
+                              .peek(r->{
+                                      List<Dish> dishes = dishRepo.findByRestaurantAndCreatedAt(r, LocalDate.now());
+                                      r.setDishes(dishes);
+                              })
+                              .collect(Collectors.toList());
 
         List<RestaurantResource> restaurantResources =
                 new RestaurantAssembler().toResources(restaurants);
@@ -98,13 +94,7 @@ public class RestaurantController {
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody Restaurant restaurant, BindingResult result) {
-        if (result.hasErrors()) {
-            List<String> errorFields =
-                    result.getFieldErrors().stream()
-                            .map(r-> String.valueOf(r.getField()))
-                            .collect(Collectors.toList());
-            throw new DataNotValidException(errorFields);
-        }
+        checkErrors(result);
         if (Objects.isNull(restaurant.getDishes())) {
             restaurant.setDishes(new ArrayList<>());
             restaurantRepo.save(restaurant);

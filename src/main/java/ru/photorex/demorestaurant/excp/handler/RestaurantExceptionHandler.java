@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.photorex.demorestaurant.excp.DataNotValidException;
 import ru.photorex.demorestaurant.excp.DishNotFoundException;
 import ru.photorex.demorestaurant.excp.RestaurantNotFoundException;
+import ru.photorex.demorestaurant.excp.RestaurantNotFoundNewDishException;
 
 import java.time.LocalDateTime;
 
@@ -32,6 +33,16 @@ public class RestaurantExceptionHandler {
         errorResponse.setTimeStamp(LocalDateTime.now());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.PRECONDITION_FAILED);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException(RestaurantNotFoundNewDishException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(HttpStatus.NO_CONTENT.value());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setTimeStamp(LocalDateTime.now());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.NO_CONTENT);
     }
 
     private ResponseEntity<ErrorResponse> createResponse (RuntimeException ex) {

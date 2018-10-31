@@ -11,7 +11,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.photorex.demorestaurant.domain.Dish;
 import ru.photorex.demorestaurant.domain.Restaurant;
+import ru.photorex.demorestaurant.excp.DataNotValidException;
 import ru.photorex.demorestaurant.excp.RestaurantNotFoundException;
+import ru.photorex.demorestaurant.excp.RestaurantNotFoundNewDishException;
 import ru.photorex.demorestaurant.repo.DishRepo;
 import ru.photorex.demorestaurant.repo.RestaurantRepo;
 import ru.photorex.demorestaurant.to.DishAssembler;
@@ -73,7 +75,8 @@ public class RestaurantController {
 
     @GetMapping("/{id}/dishes")
     public Resources<DishTo> getDishesOneRestaurant(@PathVariable Long id) {
-        Restaurant restaurant = restaurantRepo.findByIdAndUpdatedAt(id, LocalDate.now());
+        Restaurant restaurant = restaurantRepo.findByIdAndUpdatedAt(id, LocalDate.now())
+                                              .orElseThrow(RestaurantNotFoundNewDishException::new);
         List<Dish> dishes =dishRepo.findByRestaurantAndCreatedAt(restaurant, LocalDate.now());
 
         List<DishTo> dishTos =

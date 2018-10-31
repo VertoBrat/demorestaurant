@@ -14,7 +14,7 @@ import ru.photorex.demorestaurant.excp.RestaurantNotFoundException;
 import ru.photorex.demorestaurant.repo.DishRepo;
 import ru.photorex.demorestaurant.repo.RestaurantRepo;
 import ru.photorex.demorestaurant.to.DishAssembler;
-import ru.photorex.demorestaurant.to.DishResource;
+import ru.photorex.demorestaurant.to.DishTo;
 
 import javax.validation.Valid;
 
@@ -36,17 +36,17 @@ public class DishController {
     private DishRepo dishRepo;
 
     @GetMapping
-    public Resources<DishResource> all() {
+    public Resources<DishTo> all() {
         List<Dish> list = (List<Dish>) dishRepo.findAll();
-        List<DishResource> dishes = new DishAssembler().toResources(list);
+        List<DishTo> dishes = new DishAssembler().toResources(list);
         return new Resources<>(dishes,
                 linkTo(methodOn(DishController.class).all()).withSelfRel());
     }
 
     @GetMapping("/{id}")
-    public Resource<DishResource> one(@PathVariable Long id) {
+    public Resource<DishTo> one(@PathVariable Long id) {
         Dish dish = dishRepo.findById(id).orElseThrow(() -> new DishNotFoundException(id));
-        DishResource resource = new DishAssembler().toResource(dish);
+        DishTo resource = new DishAssembler().toResource(dish);
         return new Resource<>(resource,
                 linkTo(methodOn(DishController.class).one(id)).withSelfRel());
     }
@@ -58,6 +58,7 @@ public class DishController {
         Restaurant restaurant =
                 restaurantRepo.findById(restaurantId)
                               .orElseThrow(()->new RestaurantNotFoundException(restaurantId));
+        restaurant.init();
         dish.setRestaurant(restaurant);
         dishRepo.save(dish);
 
@@ -67,17 +68,36 @@ public class DishController {
     @PatchMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Dish dish) {
         Dish oldDish = dishRepo.findById(id).orElseThrow(()->new DishNotFoundException(id));
-        if (dish.getName()!=null)
+        boolean isNew = false;
+        if (dish.getName()!=null) {
             oldDish.setName(dish.getName());
-        if (dish.getPrice()!=null)
+            isNew = true;
+        }
+        if (dish.getPrice()!=null) {
             oldDish.setPrice(dish.getPrice());
-        if (dish.getCreatedAt()!=null)
+            isNew = true;
+        }
+        if (dish.getCreatedAt()!=null) {
             oldDish.setCreatedAt(dish.getCreatedAt());
-        if (dish.getRestaurant()!=null)
+            isNew = true;
+        }
+        if (dish.getRestaurant()!=null) {
             oldDish.setRestaurant(dish.getRestaurant());
+            isNew = true;
+        }
 
-        dishRepo.save(oldDish);
+        if (isNew) {
+            dishRepo.save(oldDish);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        Dish dish = dishRepo.findById(id).orElseThrow(()->new DishNotFoundException(id));
+        dishRepo.delete(dish);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

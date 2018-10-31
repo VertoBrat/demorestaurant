@@ -5,20 +5,20 @@ import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import ru.photorex.demorestaurant.domain.Restaurant;
 import ru.photorex.demorestaurant.web.RestaurantController;
 
-public class RestaurantAssembler extends ResourceAssemblerSupport<Restaurant, RestaurantResource> {
+public class RestaurantAssembler extends ResourceAssemblerSupport<Restaurant, RestaurantTo> {
 
     public RestaurantAssembler() {
-        super(RestaurantController.class, RestaurantResource.class);
+        super(RestaurantController.class, RestaurantTo.class);
     }
 
     @Override
-    protected RestaurantResource instantiateResource(Restaurant entity) {
-        return new RestaurantResource(entity);
+    protected RestaurantTo instantiateResource(Restaurant entity) {
+        return new RestaurantTo(entity);
     }
 
     @Override
-    public RestaurantResource toResource(Restaurant restaurant) {
-        RestaurantResource resource = createResourceWithId(restaurant.getId(), restaurant);
+    public RestaurantTo toResource(Restaurant restaurant) {
+        RestaurantTo resource = createResourceWithId(restaurant.getId(), restaurant);
         resource.add(ControllerLinkBuilder
                     .linkTo(RestaurantController.class).slash(restaurant.getId()).slash("dishes").withRel("lastDishes"));
         return resource;

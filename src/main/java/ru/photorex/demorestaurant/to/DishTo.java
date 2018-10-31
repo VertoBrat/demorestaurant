@@ -6,7 +6,7 @@ import org.springframework.hateoas.ResourceSupport;
 import ru.photorex.demorestaurant.domain.Dish;
 
 
-public class DishResource extends ResourceSupport {
+public class DishTo extends ResourceSupport {
 
     @Getter
     private String name;
@@ -14,7 +14,7 @@ public class DishResource extends ResourceSupport {
     @Getter
     private Long price;
 
-    public DishResource(Dish dish) {
+    public DishTo(Dish dish) {
         this.name = dish.getName();
         this.price = dish.getPrice();
     }

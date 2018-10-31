@@ -25,7 +25,6 @@ public class Restaurant {
     @NotNull
     private String location;
 
-    @NotNull
     @Column(name = "updated_at")
     private LocalDate updatedAt;
 
@@ -33,4 +32,9 @@ public class Restaurant {
               cascade = CascadeType.ALL)
    @JoinColumn(name = "restaurant_id")
     private List<Dish> dishes;
+
+   @PrePersist
+   public void init() {
+       this.updatedAt = LocalDate.now();
+   }
 }

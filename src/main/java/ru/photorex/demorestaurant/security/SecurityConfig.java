@@ -29,12 +29,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private SimpleUrlAuthenticationFailureHandler myFailureHandler = new SimpleUrlAuthenticationFailureHandler();
 
+//    @Override
+////    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+////        auth.inMemoryAuthentication()
+////                .withUser("admin").password(encoder().encode("adminPass")).roles("ADMIN")
+////                .and()
+////                .withUser("user").password(encoder().encode("userPass")).roles("USER");
+////    }
+
+
     @Override
-    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin").password(encoder().encode("adminPass")).roles("ADMIN")
-                .and()
-                .withUser("user").password(encoder().encode("userPass")).roles("USER");
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
     }
 
     @Bean

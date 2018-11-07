@@ -39,7 +39,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "restaurant_id")
+    @JoinColumn(name = "user_id")
     private List<Vote> votes;
 
     public User() {

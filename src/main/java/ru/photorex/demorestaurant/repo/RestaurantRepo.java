@@ -1,6 +1,7 @@
 package ru.photorex.demorestaurant.repo;
 
 import ch.qos.logback.classic.pattern.LineOfCallerConverter;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RestaurantRepo extends CrudRepository<Restaurant, Long> {
+public interface RestaurantRepo extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findByUpdatedAt(LocalDate date);
     Optional<Restaurant> findByIdAndUpdatedAt(Long id, LocalDate date);
 

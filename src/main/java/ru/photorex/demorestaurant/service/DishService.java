@@ -54,7 +54,7 @@ public class DishService {
     public ResponseEntity<?> create(Long restaurantId, Dish dish) {
         Restaurant restaurant =
                 restaurantRepo.findById(restaurantId)
-                        .orElseThrow(()->new RestaurantNotFoundException(restaurantId));
+                        .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
         restaurant.init();
         dish.setRestaurant(restaurant);
         dishRepo.save(dish);
@@ -64,21 +64,21 @@ public class DishService {
 
     @Transactional
     public ResponseEntity<?> update(Long id, Dish dish) {
-        Dish oldDish = dishRepo.findById(id).orElseThrow(()->new DishNotFoundException(id));
+        Dish oldDish = dishRepo.findById(id).orElseThrow(() -> new DishNotFoundException(id));
         boolean isNew = false;
-        if (dish.getName()!=null) {
+        if (dish.getName() != null) {
             oldDish.setName(dish.getName());
             isNew = true;
         }
-        if (dish.getPrice()!=null) {
+        if (dish.getPrice() != null) {
             oldDish.setPrice(dish.getPrice());
             isNew = true;
         }
-        if (dish.getCreatedAt()!=null) {
+        if (dish.getCreatedAt() != null) {
             oldDish.setCreatedAt(dish.getCreatedAt());
             isNew = true;
         }
-        if (dish.getRestaurant()!=null) {
+        if (dish.getRestaurant() != null) {
             oldDish.setRestaurant(dish.getRestaurant());
             isNew = true;
         }
@@ -93,7 +93,7 @@ public class DishService {
 
     @Transactional
     public ResponseEntity<?> delete(Long id) {
-        Dish dish = dishRepo.findById(id).orElseThrow(()->new DishNotFoundException(id));
+        Dish dish = dishRepo.findById(id).orElseThrow(() -> new DishNotFoundException(id));
         dishRepo.delete(dish);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -13,6 +13,7 @@ import ru.photorex.demorestaurant.domain.Role;
 import ru.photorex.demorestaurant.util.Registration;
 import ru.photorex.demorestaurant.domain.User;
 import ru.photorex.demorestaurant.repo.UserRepo;
+
 import static ru.photorex.demorestaurant.util.DataValidation.*;
 
 import javax.validation.Valid;
@@ -45,7 +46,6 @@ public class UserController {
         userRepo.save(Registration.toUser(encoder, user, true));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 
 
 }

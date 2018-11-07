@@ -52,7 +52,7 @@ public class RestaurantExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NO_CONTENT);
     }
 
-    private ResponseEntity<ErrorResponse> createResponse (RuntimeException ex) {
+    private ResponseEntity<ErrorResponse> createResponse(RuntimeException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(ex.getMessage());

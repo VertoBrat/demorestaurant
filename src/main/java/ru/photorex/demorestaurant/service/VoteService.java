@@ -39,10 +39,10 @@ public class VoteService {
 
     @Transactional
     public ResponseEntity<?> add(Restaurant restaurant, User user, int rank) {
-
+        LocalDateTime now = LocalDateTime.now();
         Vote v = getByUserId(user.getId());
         LocalTime lt = LocalTime.of(11, 0);
-        if (v != null && lt.isBefore(LocalTime.now()))
+        if (v != null && lt.isBefore(now.toLocalTime()))
             throw new TooLateAddVoteException();
         if (v == null) {
             Vote vote = new Vote();
@@ -51,10 +51,11 @@ public class VoteService {
             vote.setUser(user);
 
             return save(vote);
-        }
-        else {
+        } else {
             v.setRang(rank);
             v.setRestaurant(restaurant);
+            v.setCreatedAt(now);
+
             return save(v);
         }
     }

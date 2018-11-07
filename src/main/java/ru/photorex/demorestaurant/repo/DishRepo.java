@@ -12,5 +12,6 @@ import java.util.List;
 @Repository
 public interface DishRepo extends JpaRepository<Dish, Long> {
     List<Dish> findByRestaurantAndCreatedAt(Restaurant restaurant, LocalDate date);
+
     List<Dish> findByRestaurant(Restaurant restaurant);
 }

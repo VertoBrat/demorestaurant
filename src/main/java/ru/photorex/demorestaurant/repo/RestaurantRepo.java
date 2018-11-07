@@ -14,6 +14,7 @@ import java.util.Optional;
 @Repository
 public interface RestaurantRepo extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findByUpdatedAt(LocalDate date);
+
     Optional<Restaurant> findByIdAndUpdatedAt(Long id, LocalDate date);
 
 //    @Query(nativeQuery = true, value =

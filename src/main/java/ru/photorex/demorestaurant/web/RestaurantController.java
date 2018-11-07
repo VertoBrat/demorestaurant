@@ -12,11 +12,11 @@ import ru.photorex.demorestaurant.domain.Restaurant;
 import ru.photorex.demorestaurant.service.RestaurantService;
 import ru.photorex.demorestaurant.to.DishTo;
 import ru.photorex.demorestaurant.to.RestaurantTo;
+
 import static ru.photorex.demorestaurant.util.DataValidation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-
 
 
 @RestController
@@ -33,9 +33,9 @@ public class RestaurantController {
     @GetMapping
     public Resources<RestaurantTo> lastAll(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                            @RequestParam(value = "day", required = false)
-                                           LocalDate date) {
+                                                   LocalDate date) {
 
-        LocalDate ld = date!=null ? date:LocalDate.now();
+        LocalDate ld = date != null ? date : LocalDate.now();
         return restaurantService.getAllCurrentDay(ld);
     }
 

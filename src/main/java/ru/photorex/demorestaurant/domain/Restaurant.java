@@ -28,17 +28,17 @@ public class Restaurant {
     @Column(name = "updated_at")
     private LocalDate updatedAt;
 
-   @OneToMany(fetch = FetchType.LAZY,
-              cascade = CascadeType.ALL)
-   @JoinColumn(name = "restaurant_id")
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JoinColumn(name = "restaurant_id")
     private List<Dish> dishes;
 
-   @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-   @JoinColumn(name = "restaurant_id")
-   private List<Vote> votes;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "restaurant_id")
+    private List<Vote> votes;
 
-   @PrePersist
-   public void init() {
-       this.updatedAt = LocalDate.now();
-   }
+    @PrePersist
+    public void init() {
+        this.updatedAt = LocalDate.now();
+    }
 }

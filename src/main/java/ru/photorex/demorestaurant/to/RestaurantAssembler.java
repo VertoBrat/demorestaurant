@@ -1,6 +1,7 @@
 package ru.photorex.demorestaurant.to;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import ru.photorex.demorestaurant.domain.Restaurant;
 import ru.photorex.demorestaurant.web.RestaurantController;

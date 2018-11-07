@@ -35,12 +35,18 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(String userName, String encode, String email, HashSet<Role> objects) {
+    public User(String userName, String password, String email) {
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+    }
+
+    public User(String userName, String encode, String email, Set<Role> objects) {
         this.userName = userName;
         this.password = encode;
         this.email = email;
@@ -50,5 +56,9 @@ public class User {
     @PrePersist
     private void initRole() {
         roles.add(Role.ROLE_USER);
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
     }
 }

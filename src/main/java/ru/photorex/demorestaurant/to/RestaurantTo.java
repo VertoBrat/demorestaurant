@@ -29,7 +29,7 @@ public class RestaurantTo extends ResourceSupport {
         this.dishes = da.toResources(restaurant.getDishes());
         this.voteRank = restaurant.getVotes().stream()
                 .mapToInt(Vote::getRang).asDoubleStream()
-                .reduce((x, y)->(x+y)/2).orElse(0);
+                .average().orElse(0);
 
     }
 }

@@ -8,9 +8,14 @@ import ru.photorex.demorestaurant.domain.Restaurant;
 import org.springframework.security.core.userdetails.User;
 import ru.photorex.demorestaurant.domain.Vote;
 import ru.photorex.demorestaurant.excp.RestaurantNotFoundException;
+import ru.photorex.demorestaurant.excp.TooLateAddVoteException;
 import ru.photorex.demorestaurant.repo.RestaurantRepo;
 import ru.photorex.demorestaurant.repo.UserRepo;
 import ru.photorex.demorestaurant.service.VoteService;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @RestController
 @RequestMapping("/vote")
@@ -38,11 +43,8 @@ public class VoteController {
         if (restaurant == null)
             throw new RestaurantNotFoundException(restaurantId);
         ru.photorex.demorestaurant.domain.User user1 = userRepo.getByUserName(user.getUsername()).get();
-        Vote vote = new Vote();
-        vote.setRang(rank);
-        vote.setRestaurant(restaurant);
-        vote.setUser(user1);
 
-        return voteService.save(vote);
+        return voteService.add(restaurant, user1, rank);
+
     }
 }

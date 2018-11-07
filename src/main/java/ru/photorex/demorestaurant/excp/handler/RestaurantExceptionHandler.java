@@ -28,6 +28,11 @@ public class RestaurantExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException(TooLateAddVoteException ex) {
+        return createResponse(ex);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(DataNotValidException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.PRECONDITION_FAILED.value());

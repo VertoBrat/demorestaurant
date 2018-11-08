@@ -6,16 +6,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.photorex.demorestaurant.domain.Restaurant;
 import org.springframework.security.core.userdetails.User;
-import ru.photorex.demorestaurant.domain.Vote;
 import ru.photorex.demorestaurant.excp.RestaurantNotFoundException;
-import ru.photorex.demorestaurant.excp.TooLateAddVoteException;
 import ru.photorex.demorestaurant.repo.RestaurantRepo;
 import ru.photorex.demorestaurant.repo.UserRepo;
 import ru.photorex.demorestaurant.service.VoteService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 
 @RestController
 @RequestMapping("/vote")
@@ -39,8 +36,9 @@ public class VoteController {
                                          required = false) int rank,
                                  @AuthenticationPrincipal User user) {
 
-        Restaurant restaurant = restaurantRepo.getOne(restaurantId);
-        if (restaurant == null)
+        Restaurant restaurant = restaurantRepo.findById(restaurantId)
+                .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
+        if (restaurant.getUpdatedAt().isBefore(LocalDate.now()))
             throw new RestaurantNotFoundException(restaurantId);
         ru.photorex.demorestaurant.domain.User user1 = userRepo.getByUserName(user.getUsername()).get();
 

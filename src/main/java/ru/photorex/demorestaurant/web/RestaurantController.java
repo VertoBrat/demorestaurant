@@ -46,7 +46,7 @@ public class RestaurantController {
 
     @GetMapping("/{id}/dishes")
     public Resources<DishTo> getDishesPerOneRestaurant(@PathVariable Long id) {
-        return restaurantService.getDishesPerOneRestaurant(id);
+        return restaurantService.getLastDishesPerOneRestaurant(id);
     }
 
     @GetMapping("/{id}")

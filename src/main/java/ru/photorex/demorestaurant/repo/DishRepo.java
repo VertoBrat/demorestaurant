@@ -14,4 +14,6 @@ public interface DishRepo extends JpaRepository<Dish, Long> {
     List<Dish> findByRestaurantAndCreatedAt(Restaurant restaurant, LocalDate date);
 
     List<Dish> findByRestaurant(Restaurant restaurant);
+
+    List<Dish> findByCreatedAt(LocalDate date);
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.photorex.demorestaurant.domain.Restaurant;
 import org.springframework.security.core.userdetails.User;
 import ru.photorex.demorestaurant.excp.RestaurantNotFoundException;
+import ru.photorex.demorestaurant.excp.RestaurantNotFoundNewDishException;
 import ru.photorex.demorestaurant.repo.RestaurantRepo;
 import ru.photorex.demorestaurant.repo.UserRepo;
 import ru.photorex.demorestaurant.service.VoteService;
@@ -39,7 +40,7 @@ public class VoteController {
         Restaurant restaurant = restaurantRepo.findById(restaurantId)
                 .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
         if (restaurant.getUpdatedAt().isBefore(LocalDate.now()))
-            throw new RestaurantNotFoundException(restaurantId);
+            throw new RestaurantNotFoundNewDishException();
         ru.photorex.demorestaurant.domain.User user1 = userRepo.getByUserName(user.getUsername()).get();
 
         return voteService.add(restaurant, user1, rank);

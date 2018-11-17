@@ -24,9 +24,7 @@ import ru.photorex.demorestaurant.web.RestaurantController;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -49,24 +47,19 @@ public class RestaurantService {
 
     public Resources<RestaurantTo> getAllCurrentDay(LocalDate currentDay) {
         List<Restaurant> restaurantsRepo =
-                restaurantRepo.findByUpdatedAt(currentDay).stream()
-                        .peek(r -> {
-                            List<Dish> dishes =
-                                    dishRepo.findByRestaurantAndCreatedAt(r, currentDay);
-                            List<Vote> votes =
-                                    voteRepo.findByRestaurantAndCreatedAtBetween(r,
-                                            LocalDateTime.of(currentDay, LocalTime.of(0, 0)),
-                                            LocalDateTime.of(currentDay, LocalTime.of(23, 0)));
-                            r.setVotes(votes);
-                            r.setDishes(dishes);
-                        })
+                restaurantRepo.getByDay(currentDay)
+                        .stream()
+                        .peek(r -> prepareData(r, currentDay))
                         .collect(Collectors.toList());
 
         List<RestaurantTo> restaurants =
-                new RestaurantAssembler().toResources(restaurantsRepo);
+                new RestaurantAssembler().toResources(restaurantsRepo).stream()
+                //.sorted(Comparator.comparingDouble(RestaurantTo::getVoteRank))
+                .sorted((a,b)->b.getVoteRank().compareTo(a.getVoteRank()))
+                .collect(Collectors.toList());
 
         return new Resources<>(restaurants,
-                linkTo(methodOn(RestaurantController.class).lastAll(currentDay)).withSelfRel());
+                linkTo(methodOn(RestaurantController.class).lastAll(currentDay)).withRel("restaurants"));
     }
 
     public Resources<RestaurantTo> getAll() {
@@ -78,7 +71,7 @@ public class RestaurantService {
                 linkTo(methodOn(RestaurantController.class).all()).withSelfRel());
     }
 
-    public Resources<DishTo> getDishesPerOneRestaurant(Long id) {
+    public Resources<DishTo> getLastDishesPerOneRestaurant(Long id) {
         Restaurant restaurant = restaurantRepo.findByIdAndUpdatedAt(id, LocalDate.now())
                 .orElseThrow(RestaurantNotFoundNewDishException::new);
 
@@ -103,8 +96,7 @@ public class RestaurantService {
         if (Objects.isNull(restaurant.getDishes())) {
             restaurant.setDishes(new ArrayList<>());
             restaurantRepo.save(restaurant);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+        } else
         restaurantRepo.save(restaurant);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -132,5 +124,11 @@ public class RestaurantService {
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
         restaurantRepo.delete(restaurant);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private void prepareData(Restaurant r, LocalDate date) {
+        r.setVotes(voteRepo.findByRestaurantAndCreatedAtBetween(r,
+                        LocalDateTime.of(date, LocalTime.MIDNIGHT),
+                        LocalDateTime.of(date, LocalTime.MAX)));
     }
 }

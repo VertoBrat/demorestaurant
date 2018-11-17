@@ -18,7 +18,7 @@ public class RestaurantTo extends ResourceSupport {
     private String location;
 
     @Getter
-    private double voteRank;
+    private Double voteRank;
 
     @Getter
     private List<DishTo> dishes;

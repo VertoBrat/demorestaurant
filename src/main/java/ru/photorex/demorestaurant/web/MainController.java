@@ -15,7 +15,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api", produces = "application/hal+json")
 public class MainController {
 
     private RepositoryEntityLinks entityLinks;
@@ -29,6 +29,7 @@ public class MainController {
     public Resources<String> all () {
         return new Resources<String>(Collections.EMPTY_LIST,linkTo(methodOn(RestaurantController.class).lastAll(null)).withRel("restaurants"),
                                                         linkTo(methodOn(RestaurantController.class).lastAll(now())).withRel("actualRestaurantsInfo"),
-                                                        linkTo(methodOn(DishController.class).all()).withRel("dishes"));
+                                                        linkTo(methodOn(DishController.class).all()).withRel("dishes"),
+                linkTo(methodOn(UserController.class).create(null, null)).withRel("newUser"));
     }
 }

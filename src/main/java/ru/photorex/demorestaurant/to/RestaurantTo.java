@@ -1,6 +1,7 @@
 package ru.photorex.demorestaurant.to;
 
 import lombok.Getter;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.hateoas.ResourceSupport;
 import ru.photorex.demorestaurant.domain.Restaurant;
 import ru.photorex.demorestaurant.domain.Vote;

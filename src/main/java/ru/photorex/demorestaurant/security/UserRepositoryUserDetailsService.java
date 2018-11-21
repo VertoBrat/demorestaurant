@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.photorex.demorestaurant.domain.Role;
 import ru.photorex.demorestaurant.domain.User;
 import ru.photorex.demorestaurant.repo.UserRepo;
 
@@ -33,7 +32,7 @@ public class UserRepositoryUserDetailsService implements UserDetailsService {
                 mapRolesToAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<User.Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
     }
 }

@@ -1,6 +1,8 @@
 package ru.photorex.demorestaurant.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -92,6 +94,7 @@ public class RestaurantService {
     }
 
     @Transactional
+    @CacheEvict(value = "restaurant", allEntries = true)
     public ResponseEntity<?> create(Restaurant restaurant) {
         if (Objects.isNull(restaurant.getDishes())) {
             restaurant.setDishes(new ArrayList<>());
@@ -103,6 +106,7 @@ public class RestaurantService {
     }
 
     @Transactional
+    @CacheEvict(value = "restaurant", allEntries = true)
     public ResponseEntity<?> update(Long id, Restaurant restaurant) {
         Restaurant oldRestaurant = restaurantRepo.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
@@ -119,6 +123,7 @@ public class RestaurantService {
     }
 
     @Transactional
+    @CacheEvict(value = "restaurant", allEntries = true)
     public ResponseEntity<?> delete(Long id) {
         Restaurant restaurant = restaurantRepo.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));

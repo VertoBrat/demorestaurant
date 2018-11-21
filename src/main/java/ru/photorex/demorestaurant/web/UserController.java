@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.photorex.demorestaurant.domain.Role;
 import ru.photorex.demorestaurant.util.Registration;
 import ru.photorex.demorestaurant.domain.User;
 import ru.photorex.demorestaurant.repo.UserRepo;
@@ -17,7 +16,6 @@ import ru.photorex.demorestaurant.repo.UserRepo;
 import static ru.photorex.demorestaurant.util.DataValidation.*;
 
 import javax.validation.Valid;
-import java.util.Collections;
 
 @RestController
 @RequestMapping("/registration")
@@ -42,7 +40,7 @@ public class UserController {
     @PostMapping("/admin")
     public ResponseEntity<?> createAdmin(@Valid @RequestBody User user, BindingResult result) {
         checkErrors(result);
-        user.addRole(Role.ROLE_ADMIN);
+        user.addRole(User.Role.ROLE_ADMIN);
         userRepo.save(Registration.toUser(encoder, user, true));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

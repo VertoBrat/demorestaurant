@@ -1,6 +1,7 @@
 package ru.photorex.demorestaurant.repo;
 
 import ch.qos.logback.classic.pattern.LineOfCallerConverter;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,8 +20,9 @@ import java.util.Optional;
 public interface RestaurantRepo extends JpaRepository<Restaurant, Long> {
 
   //  @Query(value = "select distinct r from Restaurant r where r.id in (select d.restaurant.id from Dish d where d.createdAt=?1)")
-    @EntityGraph(value = "Restaurant.dishes")
-    @Query("select distinct r from Restaurant r join r.dishes d where d.createdAt=?1")
+  @Cacheable("restaurant")
+  //@EntityGraph(value = "Restaurant.dishes")
+    @Query("select distinct r from Restaurant r join fetch r.dishes d where d.createdAt=?1")
     List<Restaurant> getByDay(LocalDate date);
 
     List<Restaurant> findByUpdatedAt(LocalDate date);

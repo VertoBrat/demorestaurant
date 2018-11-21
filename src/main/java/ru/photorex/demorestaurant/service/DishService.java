@@ -1,6 +1,7 @@
 package ru.photorex.demorestaurant.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,7 @@ public class DishService {
     }
 
     @Transactional
+    @CacheEvict(value = "restaurant", allEntries = true)
     public ResponseEntity<?> create(Long restaurantId, Dish dish) {
         Restaurant restaurant =
                 restaurantRepo.findById(restaurantId)
@@ -63,6 +65,7 @@ public class DishService {
     }
 
     @Transactional
+    @CacheEvict(value = "restaurant", allEntries = true)
     public ResponseEntity<?> update(Long id, Dish dish) {
         Dish oldDish = dishRepo.findById(id).orElseThrow(() -> new DishNotFoundException(id));
         boolean isNew = false;
@@ -92,6 +95,7 @@ public class DishService {
     }
 
     @Transactional
+    @CacheEvict(value = "restaurant", allEntries = true)
     public ResponseEntity<?> delete(Long id) {
         Dish dish = dishRepo.findById(id).orElseThrow(() -> new DishNotFoundException(id));
         dishRepo.delete(dish);

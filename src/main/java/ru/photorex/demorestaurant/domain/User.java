@@ -37,6 +37,10 @@ public class User {
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
+    public enum Role {
+        ROLE_USER, ROLE_ADMIN
+    }
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Vote> votes;
 

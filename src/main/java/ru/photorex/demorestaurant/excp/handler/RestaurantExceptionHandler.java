@@ -49,7 +49,7 @@ public class RestaurantExceptionHandler {
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setTimeStamp(LocalDateTime.now());
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<ErrorResponse> createResponse(RuntimeException ex) {

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping("/vote")
+@RequestMapping("/api/vote")
 public class VoteController {
 
     private VoteService voteService;
@@ -41,9 +41,9 @@ public class VoteController {
                 .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
         if (restaurant.getUpdatedAt().isBefore(LocalDate.now()))
             throw new RestaurantNotFoundNewDishException();
-        ru.photorex.demorestaurant.domain.User user1 = userRepo.getByUserName(user.getUsername()).get();
+        ru.photorex.demorestaurant.domain.User domainUser = userRepo.getByUserName(user.getUsername()).get();
 
-        return voteService.add(restaurant, user1, rank);
+        return voteService.add(restaurant, domainUser, rank);
 
     }
 }

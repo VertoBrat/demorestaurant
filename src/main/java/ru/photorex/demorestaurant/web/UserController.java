@@ -18,7 +18,7 @@ import static ru.photorex.demorestaurant.util.DataValidation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/registration")
+@RequestMapping("/api/registration")
 public class UserController {
 
     private UserRepo userRepo;

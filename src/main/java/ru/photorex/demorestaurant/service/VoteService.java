@@ -32,7 +32,7 @@ public class VoteService {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    public Vote getByUserId(long userId) {
+    private Vote getByUserId(long userId) {
         LocalDateTime ldt = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
         return voteRepo.findByUserIdAndCreatedAtBetween(userId, ldt, LocalDateTime.now());
     }

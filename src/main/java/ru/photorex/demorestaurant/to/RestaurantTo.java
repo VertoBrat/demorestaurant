@@ -1,14 +1,15 @@
 package ru.photorex.demorestaurant.to;
 
 import lombok.Getter;
-import org.springframework.data.rest.core.annotation.RestResource;
+
 import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.core.Relation;
 import ru.photorex.demorestaurant.domain.Restaurant;
 import ru.photorex.demorestaurant.domain.Vote;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
+@Relation(collectionRelation = "restaurants")
 public class RestaurantTo extends ResourceSupport {
     private static final DishAssembler da = new DishAssembler();
 

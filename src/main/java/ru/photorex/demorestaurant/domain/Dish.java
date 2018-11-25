@@ -1,11 +1,8 @@
 package ru.photorex.demorestaurant.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;

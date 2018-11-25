@@ -8,7 +8,6 @@ public class DishAssembler extends ResourceAssemblerSupport<Dish, DishTo> {
 
     public DishAssembler() {
         super(DishController.class, DishTo.class);
-
     }
 
     @Override

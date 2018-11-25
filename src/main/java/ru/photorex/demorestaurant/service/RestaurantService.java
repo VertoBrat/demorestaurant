@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.rest.core.annotation.RestResource;
+
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -61,9 +61,9 @@ public class RestaurantService {
 
         List<RestaurantTo> restaurants =
                 new RestaurantAssembler().toResources(restaurantsRepo).stream()
-                //.sorted(Comparator.comparingDouble(RestaurantTo::getVoteRank))
-                .sorted((a,b)->b.getVoteRank().compareTo(a.getVoteRank()))
-                .collect(Collectors.toList());
+                        //.sorted(Comparator.comparingDouble(RestaurantTo::getVoteRank))
+                        .sorted((a, b) -> b.getVoteRank().compareTo(a.getVoteRank()))
+                        .collect(Collectors.toList());
 
         return new Resources<>(restaurants,
                 linkTo(methodOn(RestaurantController.class).lastAll(currentDay)).withRel("restaurants"));
@@ -105,7 +105,7 @@ public class RestaurantService {
             restaurant.setDishes(new ArrayList<>());
             restaurantRepo.save(restaurant);
         } else
-        restaurantRepo.save(restaurant);
+            restaurantRepo.save(restaurant);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -138,13 +138,13 @@ public class RestaurantService {
 
     private void prepareData(Restaurant r, LocalDate date) {
         r.setVotes(voteRepo.findByRestaurantAndCreatedAtBetween(r,
-                        LocalDateTime.of(date, LocalTime.MIDNIGHT),
-                        LocalDateTime.of(date, LocalTime.MAX)));
+                LocalDateTime.of(date, LocalTime.MIDNIGHT),
+                LocalDateTime.of(date, LocalTime.MAX)));
     }
 
     public ResponseEntity<?> getPaging(LocalDate ld, Pageable pageable, PagedResourcesAssembler<Restaurant> assembler) {
         Page<Restaurant> p = restaurantRepo.getPaged(ld, pageable);
-        p.forEach(r->prepareData(r, ld));
-        return new ResponseEntity<>(assembler.toResource(p,restaurantAssembler), HttpStatus.OK);
+        p.forEach(r -> prepareData(r, ld));
+        return new ResponseEntity<>(assembler.toResource(p, restaurantAssembler), HttpStatus.OK);
     }
 }

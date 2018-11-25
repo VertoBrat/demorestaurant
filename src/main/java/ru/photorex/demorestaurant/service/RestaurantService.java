@@ -2,7 +2,10 @@ package ru.photorex.demorestaurant.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -39,6 +42,8 @@ public class RestaurantService {
     private DishRepo dishRepo;
     private RestaurantRepo restaurantRepo;
     private VoteRepo voteRepo;
+    @Autowired
+    private RestaurantAssembler restaurantAssembler;
 
     @Autowired
     public RestaurantService(DishRepo dishRepo, RestaurantRepo restaurantRepo, VoteRepo voteRepo) {
@@ -94,7 +99,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    @CacheEvict(value = "restaurant", allEntries = true)
+    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
     public ResponseEntity<?> create(Restaurant restaurant) {
         if (Objects.isNull(restaurant.getDishes())) {
             restaurant.setDishes(new ArrayList<>());
@@ -106,7 +111,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    @CacheEvict(value = "restaurant", allEntries = true)
+    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
     public ResponseEntity<?> update(Long id, Restaurant restaurant) {
         Restaurant oldRestaurant = restaurantRepo.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
@@ -123,7 +128,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    @CacheEvict(value = "restaurant", allEntries = true)
+    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
     public ResponseEntity<?> delete(Long id) {
         Restaurant restaurant = restaurantRepo.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
@@ -135,5 +140,11 @@ public class RestaurantService {
         r.setVotes(voteRepo.findByRestaurantAndCreatedAtBetween(r,
                         LocalDateTime.of(date, LocalTime.MIDNIGHT),
                         LocalDateTime.of(date, LocalTime.MAX)));
+    }
+
+    public ResponseEntity<?> getPaging(LocalDate ld, Pageable pageable, PagedResourcesAssembler<Restaurant> assembler) {
+        Page<Restaurant> p = restaurantRepo.getPaged(ld, pageable);
+        p.forEach(r->prepareData(r, ld));
+        return new ResponseEntity<>(assembler.toResource(p,restaurantAssembler), HttpStatus.OK);
     }
 }

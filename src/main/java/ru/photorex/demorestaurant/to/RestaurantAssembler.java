@@ -2,10 +2,13 @@ package ru.photorex.demorestaurant.to;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
+import org.springframework.hateoas.core.Relation;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.springframework.stereotype.Component;
 import ru.photorex.demorestaurant.domain.Restaurant;
 import ru.photorex.demorestaurant.web.RestaurantController;
-
+@Component
+@Relation(collectionRelation = "restaurants")
 public class RestaurantAssembler extends ResourceAssemblerSupport<Restaurant, RestaurantTo> {
 
     public RestaurantAssembler() {

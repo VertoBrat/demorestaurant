@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping("/api/vote")
+@RequestMapping("/api/votes")
 public class VoteController {
 
     private VoteService voteService;
@@ -31,10 +31,10 @@ public class VoteController {
     }
 
     @PostMapping("/{restaurantId}")
-    public ResponseEntity<?> add(@PathVariable long restaurantId,
+    public ResponseEntity<?> add(@PathVariable Long restaurantId,
                                  @RequestParam(value = "rank",
                                          defaultValue = "0",
-                                         required = false) int rank,
+                                         required = false) Integer rank,
                                  @AuthenticationPrincipal User user) {
 
         Restaurant restaurant = restaurantRepo.findById(restaurantId)

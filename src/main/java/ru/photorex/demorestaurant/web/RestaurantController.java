@@ -1,6 +1,8 @@
 package ru.photorex.demorestaurant.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -37,6 +39,15 @@ public class RestaurantController {
 
         LocalDate ld = date != null ? date : LocalDate.now();
         return restaurantService.getAllCurrentDay(ld);
+    }
+
+    @GetMapping("/paging")
+    public ResponseEntity<?> getPaged(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                          @RequestParam(value = "day", required = false)
+                                                  LocalDate date,
+                                      Pageable pageable, PagedResourcesAssembler assembler) {
+        LocalDate ld = date != null ? date : LocalDate.now();
+        return restaurantService.getPaging(ld, pageable, assembler);
     }
 
     @GetMapping("/all")

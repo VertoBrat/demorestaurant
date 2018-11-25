@@ -16,6 +16,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          HttpServletResponse httpServletResponse,
                          AuthenticationException e) throws IOException, ServletException {
         httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-                "You can't vote! Please, log in");
+                "You can't do this! Please, log in");
     }
 }

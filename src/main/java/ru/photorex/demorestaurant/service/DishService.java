@@ -52,7 +52,8 @@ public class DishService {
     }
 
     @Transactional
-    @CacheEvict(value = "restaurant", allEntries = true)
+    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
+
     public ResponseEntity<?> create(Long restaurantId, Dish dish) {
         Restaurant restaurant =
                 restaurantRepo.findById(restaurantId)
@@ -65,7 +66,7 @@ public class DishService {
     }
 
     @Transactional
-    @CacheEvict(value = "restaurant", allEntries = true)
+    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
     public ResponseEntity<?> update(Long id, Dish dish) {
         Dish oldDish = dishRepo.findById(id).orElseThrow(() -> new DishNotFoundException(id));
         boolean isNew = false;
@@ -95,7 +96,7 @@ public class DishService {
     }
 
     @Transactional
-    @CacheEvict(value = "restaurant", allEntries = true)
+    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
     public ResponseEntity<?> delete(Long id) {
         Dish dish = dishRepo.findById(id).orElseThrow(() -> new DishNotFoundException(id));
         dishRepo.delete(dish);

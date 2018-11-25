@@ -45,7 +45,7 @@ public class RestaurantExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(RestaurantNotFoundNewDishException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.NO_CONTENT.value());
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setTimeStamp(LocalDateTime.now());
 

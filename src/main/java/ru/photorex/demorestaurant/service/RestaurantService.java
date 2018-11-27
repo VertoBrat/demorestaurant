@@ -42,8 +42,6 @@ public class RestaurantService {
     private DishRepo dishRepo;
     private RestaurantRepo restaurantRepo;
     private VoteRepo voteRepo;
-    @Autowired
-    private RestaurantAssembler restaurantAssembler;
 
     @Autowired
     public RestaurantService(DishRepo dishRepo, RestaurantRepo restaurantRepo, VoteRepo voteRepo) {
@@ -52,7 +50,7 @@ public class RestaurantService {
         this.voteRepo = voteRepo;
     }
 
-    public Resources<RestaurantTo> getAllCurrentDay(LocalDate currentDay) {
+    /*public Resources<RestaurantTo> getAllCurrentDay(LocalDate currentDay) {
         List<Restaurant> restaurantsRepo =
                 restaurantRepo.getByDay(currentDay)
                         .stream()
@@ -67,16 +65,16 @@ public class RestaurantService {
 
         return new Resources<>(restaurants,
                 linkTo(methodOn(RestaurantController.class).lastAll(currentDay)).withRel("restaurants"));
-    }
+    }*/
 
-    public Resources<RestaurantTo> getAll() {
+    /*public Resources<RestaurantTo> getAll() {
         List<Restaurant> restaurantsRepo = (List<Restaurant>) restaurantRepo.findAll();
         List<RestaurantTo> restaurants =
                 new RestaurantAssembler().toResources(restaurantsRepo);
 
         return new Resources<>(restaurants,
                 linkTo(methodOn(RestaurantController.class).all()).withSelfRel());
-    }
+    }*/
 
     public Resources<DishTo> getLastDishesPerOneRestaurant(Long id) {
         Restaurant restaurant = restaurantRepo.findByIdAndUpdatedAt(id, LocalDate.now())
@@ -137,14 +135,23 @@ public class RestaurantService {
     }
 
     private void prepareData(Restaurant r, LocalDate date) {
+        if (date != null) {
         r.setVotes(voteRepo.findByRestaurantAndCreatedAtBetween(r,
                 LocalDateTime.of(date, LocalTime.MIDNIGHT),
                 LocalDateTime.of(date, LocalTime.MAX)));
+        }
+        r.setVotes(voteRepo.findAllByRestaurant(r));
     }
 
-    public ResponseEntity<?> getPaging(LocalDate ld, Pageable pageable, PagedResourcesAssembler<Restaurant> assembler) {
-        Page<Restaurant> p = restaurantRepo.getPaged(ld, pageable);
-        p.forEach(r -> prepareData(r, ld));
-        return new ResponseEntity<>(assembler.toResource(p, restaurantAssembler), HttpStatus.OK);
+    public Page<Restaurant> getPaging(LocalDate ld, Pageable pageable) {
+        Page<Restaurant> pagedRestaurants = restaurantRepo.getPaged(ld, pageable);
+        pagedRestaurants.forEach(r -> prepareData(r, ld));
+        return pagedRestaurants;
+    }
+
+    public Page<Restaurant> getAll(Pageable pageable) {
+        Page<Restaurant> allRestaurants = restaurantRepo.findAll(pageable);
+        allRestaurants.forEach(r->prepareData(r,null));
+        return allRestaurants;
     }
 }

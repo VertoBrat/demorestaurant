@@ -16,4 +16,6 @@ public interface VoteRepo extends JpaRepository<Vote, Long> {
     Vote findByUserIdAndCreatedAtBetween(long userId, LocalDateTime start, LocalDateTime end);
 
     Set<Vote> findByRestaurantAndCreatedAtBetween(Restaurant restaurant, LocalDateTime start, LocalDateTime end);
+
+    Set<Vote> findAllByRestaurant(Restaurant restaurant);
 }

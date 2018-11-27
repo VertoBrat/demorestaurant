@@ -21,11 +21,11 @@ import java.util.Optional;
 @Repository
 public interface RestaurantRepo extends JpaRepository<Restaurant, Long> {
 
-    //  @Query(value = "select distinct r from Restaurant r where r.id in (select d.restaurant.id from Dish d where d.createdAt=?1)")
+    /*//  @Query(value = "select distinct r from Restaurant r where r.id in (select d.restaurant.id from Dish d where d.createdAt=?1)")
     @Cacheable("restaurant")
     //@EntityGraph(value = "Restaurant.dishes")
     @Query("select distinct r from Restaurant r join fetch r.dishes d where d.createdAt=?1")
-    List<Restaurant> getByDay(LocalDate date);
+    List<Restaurant> getByDay(LocalDate date);*/
 
     @Cacheable("pagingRest")
     @Query(value = "select distinct r from Restaurant r join fetch r.dishes d where d.createdAt=?1",
@@ -33,4 +33,8 @@ public interface RestaurantRepo extends JpaRepository<Restaurant, Long> {
     Page<Restaurant> getPaged(LocalDate date, Pageable pageable);
 
     Optional<Restaurant> findByIdAndUpdatedAt(Long id, LocalDate date);
+
+    @Query(value = "select distinct r from Restaurant r",
+    countQuery = "select count (distinct r) from Restaurant r")
+    Page<Restaurant> all(Pageable pageable);
 }

@@ -44,6 +44,4 @@ public class UserController {
         userRepo.save(Registration.toUser(encoder, user, true));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
-
 }

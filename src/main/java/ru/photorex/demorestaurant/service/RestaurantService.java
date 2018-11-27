@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -14,23 +12,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.photorex.demorestaurant.domain.Dish;
 import ru.photorex.demorestaurant.domain.Restaurant;
-import ru.photorex.demorestaurant.domain.Vote;
+
 import ru.photorex.demorestaurant.excp.RestaurantNotFoundException;
 import ru.photorex.demorestaurant.excp.RestaurantNotFoundNewDishException;
 import ru.photorex.demorestaurant.repo.DishRepo;
 import ru.photorex.demorestaurant.repo.RestaurantRepo;
 import ru.photorex.demorestaurant.repo.VoteRepo;
-import ru.photorex.demorestaurant.to.DishAssembler;
-import ru.photorex.demorestaurant.to.DishTo;
-import ru.photorex.demorestaurant.to.RestaurantAssembler;
-import ru.photorex.demorestaurant.to.RestaurantTo;
+import ru.photorex.demorestaurant.to.*;
 import ru.photorex.demorestaurant.web.RestaurantController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -49,32 +44,6 @@ public class RestaurantService {
         this.restaurantRepo = restaurantRepo;
         this.voteRepo = voteRepo;
     }
-
-    /*public Resources<RestaurantTo> getAllCurrentDay(LocalDate currentDay) {
-        List<Restaurant> restaurantsRepo =
-                restaurantRepo.getByDay(currentDay)
-                        .stream()
-                        .peek(r -> prepareData(r, currentDay))
-                        .collect(Collectors.toList());
-
-        List<RestaurantTo> restaurants =
-                new RestaurantAssembler().toResources(restaurantsRepo).stream()
-                        //.sorted(Comparator.comparingDouble(RestaurantTo::getVoteRank))
-                        .sorted((a, b) -> b.getVoteRank().compareTo(a.getVoteRank()))
-                        .collect(Collectors.toList());
-
-        return new Resources<>(restaurants,
-                linkTo(methodOn(RestaurantController.class).lastAll(currentDay)).withRel("restaurants"));
-    }*/
-
-    /*public Resources<RestaurantTo> getAll() {
-        List<Restaurant> restaurantsRepo = (List<Restaurant>) restaurantRepo.findAll();
-        List<RestaurantTo> restaurants =
-                new RestaurantAssembler().toResources(restaurantsRepo);
-
-        return new Resources<>(restaurants,
-                linkTo(methodOn(RestaurantController.class).all()).withSelfRel());
-    }*/
 
     public Resources<DishTo> getLastDishesPerOneRestaurant(Long id) {
         Restaurant restaurant = restaurantRepo.findByIdAndUpdatedAt(id, LocalDate.now())
@@ -97,7 +66,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
+    @CacheEvict(value = "pagingRest", allEntries = true)
     public ResponseEntity<?> create(Restaurant restaurant) {
         if (Objects.isNull(restaurant.getDishes())) {
             restaurant.setDishes(new ArrayList<>());
@@ -109,7 +78,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
+    @CacheEvict(value = "pagingRest", allEntries = true)
     public ResponseEntity<?> update(Long id, Restaurant restaurant) {
         Restaurant oldRestaurant = restaurantRepo.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
@@ -126,7 +95,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
+    @CacheEvict(value = "pagingRest", allEntries = true)
     public ResponseEntity<?> delete(Long id) {
         Restaurant restaurant = restaurantRepo.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
@@ -139,6 +108,7 @@ public class RestaurantService {
         r.setVotes(voteRepo.findByRestaurantAndCreatedAtBetween(r,
                 LocalDateTime.of(date, LocalTime.MIDNIGHT),
                 LocalDateTime.of(date, LocalTime.MAX)));
+        return;
         }
         r.setVotes(voteRepo.findAllByRestaurant(r));
     }
@@ -150,8 +120,8 @@ public class RestaurantService {
     }
 
     public Page<Restaurant> getAll(Pageable pageable) {
-        Page<Restaurant> allRestaurants = restaurantRepo.findAll(pageable);
-        allRestaurants.forEach(r->prepareData(r,null));
-        return allRestaurants;
+        Page<Restaurant> allPagedRestaurants = restaurantRepo.findAll(pageable);
+        allPagedRestaurants.forEach(r->prepareData(r,null));
+        return allPagedRestaurants;
     }
 }

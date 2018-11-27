@@ -21,12 +21,6 @@ import java.util.Optional;
 @Repository
 public interface RestaurantRepo extends JpaRepository<Restaurant, Long> {
 
-    /*//  @Query(value = "select distinct r from Restaurant r where r.id in (select d.restaurant.id from Dish d where d.createdAt=?1)")
-    @Cacheable("restaurant")
-    //@EntityGraph(value = "Restaurant.dishes")
-    @Query("select distinct r from Restaurant r join fetch r.dishes d where d.createdAt=?1")
-    List<Restaurant> getByDay(LocalDate date);*/
-
     @Cacheable("pagingRest")
     @Query(value = "select distinct r from Restaurant r join fetch r.dishes d where d.createdAt=?1",
             countQuery = "select count (distinct r) from Restaurant r join r.dishes d where d.createdAt=?1")

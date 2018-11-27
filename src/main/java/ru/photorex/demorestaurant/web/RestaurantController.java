@@ -1,9 +1,11 @@
 package ru.photorex.demorestaurant.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpRequest;
@@ -14,11 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import ru.photorex.demorestaurant.domain.Restaurant;
 import ru.photorex.demorestaurant.service.RestaurantService;
-import ru.photorex.demorestaurant.to.DishTo;
-import ru.photorex.demorestaurant.to.RestaurantAssembler;
-import ru.photorex.demorestaurant.to.RestaurantTo;
-import ru.photorex.demorestaurant.to.RestaurantWithoutDishesAssembler;
+import ru.photorex.demorestaurant.to.*;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import static ru.photorex.demorestaurant.util.DataValidation.*;
 
 import javax.validation.Valid;
@@ -26,29 +26,25 @@ import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping(path = "/api/restaurants", produces = "application/json")
+@RequestMapping(path = "/api/restaurants", produces = "application/hal+json")
 public class RestaurantController {
 
     private RestaurantService restaurantService;
-    @Autowired
     private RestaurantAssembler restaurantAssembler;
-    @Autowired
     private RestaurantWithoutDishesAssembler restaurantWithoutDishesAssembler;
-
+    private RestaurantProcessor restaurantProcessor;
 
     @Autowired
-    public RestaurantController(RestaurantService restaurantService) {
+    public RestaurantController(RestaurantService restaurantService,
+                                RestaurantAssembler restaurantAssembler,
+                                RestaurantWithoutDishesAssembler restaurantWithoutDishesAssembler,
+                                RestaurantProcessor restaurantProcessor) {
+
         this.restaurantService = restaurantService;
+        this.restaurantAssembler = restaurantAssembler;
+        this.restaurantWithoutDishesAssembler = restaurantWithoutDishesAssembler;
+        this.restaurantProcessor = restaurantProcessor;
     }
-
-    /*@GetMapping
-    public Resources<RestaurantTo> lastAll(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                           @RequestParam(value = "day", required = false)
-                                           LocalDate date) {
-
-        LocalDate ld = date != null ? date : LocalDate.now();
-        return restaurantService.getAllCurrentDay(ld);
-    }*/
 
     @GetMapping
     public ResponseEntity<?> getPaged(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -58,18 +54,18 @@ public class RestaurantController {
                                       PagedResourcesAssembler<Restaurant> assembler) {
 
         LocalDate ld = date != null ? date : LocalDate.now();
-
-        return new ResponseEntity<>(assembler.toResource(restaurantService.getPaging(ld, pageable), restaurantAssembler), HttpStatus.OK);
+        Page<Restaurant> paging = restaurantService.getPaging(ld, pageable);
+        PagedResources<RestaurantTo> restaurantTos = assembler
+                .toResource(paging, restaurantAssembler);
+        restaurantProcessor.addLinks(restaurantTos);
+        return new ResponseEntity<>(restaurantTos, HttpStatus.OK);
     }
-
-   /* @GetMapping("/all")
-    public Resources<RestaurantTo> all() {
-        return restaurantService.getAll();
-    }*/
 
     @GetMapping("/all")
     public ResponseEntity<?> all(Pageable pageable, PagedResourcesAssembler<Restaurant> assembler) {
-        return new ResponseEntity<>(assembler.toResource(restaurantService.getAll(pageable),restaurantWithoutDishesAssembler), HttpStatus.OK);
+        PagedResources<RestaurantToWithoutDishes> restaurantToWithoutDishes =
+                assembler.toResource(restaurantService.getAll(pageable), restaurantWithoutDishesAssembler);
+        return new ResponseEntity<>(restaurantToWithoutDishes, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/dishes")

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.hateoas.Resources;
 import ru.photorex.demorestaurant.excp.UserNotFoundException;
+import ru.photorex.demorestaurant.repo.RestaurantRepo;
 import ru.photorex.demorestaurant.repo.UserRepo;
 
 import java.util.Collections;
@@ -25,25 +26,31 @@ public class MainController {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private RestaurantRepo restaurantRepo;
+
 
     @GetMapping
     public Resources<String> all(@AuthenticationPrincipal User user) {
         if (user == null) {
             return new Resources<String>(Collections.EMPTY_LIST,
-                    linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actualRestaurantsInfo"),
-                    linkTo(methodOn(UserController.class).create(null, null)).withRel("RegistrationNewUser"));
+                    linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actual-restaurants"),
+                    linkTo(methodOn(UserController.class).create(null, null)).withRel("register-new-user"));
         }
-        ru.photorex.demorestaurant.domain.User domainUser = userRepo.getByUserName(user.getUsername()).orElseThrow(()->new UserNotFoundException(user.getUsername()));
+        ru.photorex.demorestaurant.domain.User domainUser =
+                userRepo.getByUserName(user.getUsername())
+                        .orElseThrow(()->new UserNotFoundException(user.getUsername()));
+
         if (domainUser.getRoles().size() == 2) {
             return new Resources<String>(Collections.EMPTY_LIST,
                     linkTo(methodOn(RestaurantController.class).all(null, null)).withRel("restaurants"),
-                    linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actualRestaurantsInfo"),
+                    linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actual-restaurants"),
                     linkTo(methodOn(DishController.class).all()).withRel("dishes"),
-                    linkTo(methodOn(UserController.class).createAdmin(null, null)).withRel("newAdmin"));
+                    linkTo(methodOn(UserController.class).createAdmin(null, null)).withRel("register-new-admin"));
         }
 
-        return new Resources<String>(Collections.EMPTY_LIST,
-                linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actualRestaurantsInfo"),
-                linkTo(methodOn(VoteController.class).add(null, null, null)).withRel("vote"));
+            return new Resources<String>(Collections.EMPTY_LIST,
+                    linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actual-restaurants"));
+
     }
 }

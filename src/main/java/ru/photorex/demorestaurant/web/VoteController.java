@@ -39,11 +39,10 @@ public class VoteController {
 
         Restaurant restaurant = restaurantRepo.findById(restaurantId)
                 .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
-        if (restaurant.getUpdatedAt().isBefore(LocalDate.now()))
+        if (!restaurant.getUpdatedAt().isEqual(LocalDate.now()))
             throw new RestaurantNotFoundNewDishException();
         ru.photorex.demorestaurant.domain.User domainUser = userRepo.getByUserName(user.getUsername()).get();
 
         return voteService.add(restaurant, domainUser, rank);
-
     }
 }

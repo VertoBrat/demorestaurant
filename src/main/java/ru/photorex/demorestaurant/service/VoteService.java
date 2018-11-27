@@ -33,7 +33,7 @@ public class VoteService {
     }
 
     private Vote getByUserId(long userId) {
-        LocalDateTime ldt = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
+        LocalDateTime ldt = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
         return voteRepo.findByUserIdAndCreatedAtBetween(userId, ldt, LocalDateTime.now());
     }
 

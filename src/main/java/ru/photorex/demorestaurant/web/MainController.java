@@ -45,7 +45,7 @@ public class MainController {
             return new Resources<String>(Collections.EMPTY_LIST,
                     linkTo(methodOn(RestaurantController.class).all(null, null)).withRel("restaurants"),
                     linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actual-restaurants"),
-                    linkTo(methodOn(DishController.class).all()).withRel("dishes"),
+                    linkTo(methodOn(DishController.class).all(null, null)).withRel("dishes"),
                     linkTo(methodOn(UserController.class).createAdmin(null, null)).withRel("register-new-admin"));
         }
 

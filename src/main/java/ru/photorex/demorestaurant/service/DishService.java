@@ -2,6 +2,8 @@ package ru.photorex.demorestaurant.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -37,11 +39,8 @@ public class DishService {
         this.dishRepo = dishRepo;
     }
 
-    public Resources<DishTo> getAll() {
-        List<Dish> list = (List<Dish>) dishRepo.findAll();
-        List<DishTo> dishes = new DishAssembler().toResources(list);
-        return new Resources<>(dishes,
-                linkTo(methodOn(DishController.class).all()).withSelfRel());
+    public Page<Dish> getAll(Pageable pageable) {
+        return dishRepo.findAll(pageable);
     }
 
     public Resource<DishTo> getById(Long id) {

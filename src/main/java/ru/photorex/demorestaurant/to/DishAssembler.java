@@ -1,9 +1,11 @@
 package ru.photorex.demorestaurant.to;
 
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.springframework.stereotype.Component;
 import ru.photorex.demorestaurant.domain.Dish;
 import ru.photorex.demorestaurant.web.DishController;
 
+@Component
 public class DishAssembler extends ResourceAssemblerSupport<Dish, DishTo> {
 
     public DishAssembler() {

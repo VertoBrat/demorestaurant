@@ -16,7 +16,11 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class RestaurantProcessor {
 
     public PagedResources<RestaurantTo> addLinks(PagedResources<RestaurantTo> resources) {
-        if (resources.getMetadata().getTotalElements() <= 0) return resources;
+        if (resources.getMetadata().getTotalElements() <= 0 && hasAccessToModify()) {
+            resources.add(linkTo(methodOn(RestaurantController.class).create(null, null)).withRel("add"));
+            return resources;
+        }
+
         if (hasAccessToVote()) {
             resources.add(linkTo(methodOn(VoteController.class).add(null, null, null)).withRel("add-vote"));
         }

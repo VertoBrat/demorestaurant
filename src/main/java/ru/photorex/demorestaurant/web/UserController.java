@@ -13,6 +13,7 @@ import ru.photorex.demorestaurant.util.Registration;
 import ru.photorex.demorestaurant.domain.User;
 import ru.photorex.demorestaurant.repo.UserRepo;
 
+import static ru.photorex.demorestaurant.domain.User.Role.ROLE_ADMIN;
 import static ru.photorex.demorestaurant.util.DataValidation.*;
 
 import javax.validation.Valid;
@@ -40,7 +41,7 @@ public class UserController {
     @PostMapping("/admin")
     public ResponseEntity<?> createAdmin(@Valid @RequestBody User user, BindingResult result) {
         checkErrors(result);
-        user.addRole(User.Role.ROLE_ADMIN);
+        user.addRole(ROLE_ADMIN);
         userRepo.save(Registration.toUser(encoder, user, true));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

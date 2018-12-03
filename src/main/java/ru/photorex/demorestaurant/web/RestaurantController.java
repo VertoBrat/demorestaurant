@@ -76,7 +76,9 @@ public class RestaurantController {
 
     @GetMapping("/{id}")
     public Resource<RestaurantTo> getOne(@PathVariable Long id) {
-        return restaurantService.getOne(id);
+        Resource<RestaurantTo> restaurant = restaurantService.getOne(id);
+        restaurantProcessor.addLinks(restaurant);
+        return restaurant;
     }
 
     @PostMapping

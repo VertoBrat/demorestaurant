@@ -37,12 +37,14 @@ public class RestaurantService {
     private DishRepo dishRepo;
     private RestaurantRepo restaurantRepo;
     private VoteRepo voteRepo;
+    private RestaurantAssembler restaurantAssembler;
 
     @Autowired
-    public RestaurantService(DishRepo dishRepo, RestaurantRepo restaurantRepo, VoteRepo voteRepo) {
+    public RestaurantService(DishRepo dishRepo, RestaurantRepo restaurantRepo, VoteRepo voteRepo, RestaurantAssembler restaurantAssembler) {
         this.dishRepo = dishRepo;
         this.restaurantRepo = restaurantRepo;
         this.voteRepo = voteRepo;
+        this.restaurantAssembler = restaurantAssembler;
     }
 
     public Resources<DishTo> getLastDishesPerOneRestaurant(Long id) {
@@ -59,7 +61,7 @@ public class RestaurantService {
     public Resource<RestaurantTo> getOne(Long id) {
         Restaurant restaurant = restaurantRepo.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
-        RestaurantTo r = new RestaurantAssembler().toResource(restaurant);
+        RestaurantTo r = restaurantAssembler.toResource(restaurant);
 
         return new Resource<>(r, linkTo(methodOn(RestaurantController.class)
                 .getOne(id)).withSelfRel());

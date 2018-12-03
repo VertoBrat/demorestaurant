@@ -25,6 +25,8 @@ public class RestaurantTo extends ResourceSupport {
     @Getter
     private List<DishTo> dishes;
 
+    private Long id;
+
     public RestaurantTo(Restaurant restaurant) {
         this.name = restaurant.getName();
         this.location = restaurant.getLocation();
@@ -32,6 +34,10 @@ public class RestaurantTo extends ResourceSupport {
         this.voteRank = restaurant.getVotes().stream()
                 .mapToInt(Vote::getRang).asDoubleStream()
                 .average().orElse(0);
+        this.id = restaurant.getId();
+    }
 
+    public Long findId() {
+        return id;
     }
 }

@@ -65,6 +65,7 @@ public class RestaurantController {
     public ResponseEntity<?> all(Pageable pageable, PagedResourcesAssembler<Restaurant> assembler) {
         PagedResources<RestaurantToWithoutDishes> restaurantToWithoutDishes =
                 assembler.toResource(restaurantService.getAll(pageable), restaurantWithoutDishesAssembler);
+        restaurantProcessor.addLinks(restaurantToWithoutDishes);
         return new ResponseEntity<>(restaurantToWithoutDishes, HttpStatus.OK);
     }
 

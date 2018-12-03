@@ -15,7 +15,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @Component
 public class RestaurantProcessor {
 
-    public PagedResources<RestaurantTo> addLinks(PagedResources<RestaurantTo> resources) {
+    public <T> PagedResources<T> addLinks(PagedResources<T> resources) {
         if (resources.getMetadata().getTotalElements() <= 0 && hasAccessToModify()) {
             resources.add(linkTo(methodOn(RestaurantController.class).create(null, null)).withRel("add"));
             return resources;

@@ -1,5 +1,9 @@
 package ru.photorex.demorestaurant.domain;
 
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import ru.photorex.demorestaurant.util.PostgreSQLEnumType;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -9,6 +13,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "users")
+@TypeDef(name = "enum", typeClass = PostgreSQLEnumType.class)
 public class User {
 
     @Id
@@ -31,6 +37,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @Type(type = "enum")
     private Set<Role> roles = new HashSet<>();
 
     public enum Role {

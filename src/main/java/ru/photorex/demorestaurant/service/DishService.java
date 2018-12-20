@@ -51,8 +51,7 @@ public class DishService {
     }
 
     @Transactional
-    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
-
+    @CacheEvict(value = {"pagingRest"}, allEntries = true)
     public ResponseEntity<?> create(Long restaurantId, Dish dish) {
         Restaurant restaurant =
                 restaurantRepo.findById(restaurantId)
@@ -65,7 +64,7 @@ public class DishService {
     }
 
     @Transactional
-    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
+    @CacheEvict(value = {"pagingRest"}, allEntries = true)
     public ResponseEntity<?> update(Long id, Dish dish) {
         Dish oldDish = dishRepo.findById(id).orElseThrow(() -> new DishNotFoundException(id));
         boolean isNew = false;
@@ -91,11 +90,11 @@ public class DishService {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @Transactional
-    @CacheEvict(value = {"restaurant", "pagingRest"}, allEntries = true)
+    @CacheEvict(value = {"pagingRest"}, allEntries = true)
     public ResponseEntity<?> delete(Long id) {
         Dish dish = dishRepo.findById(id).orElseThrow(() -> new DishNotFoundException(id));
         dishRepo.delete(dish);

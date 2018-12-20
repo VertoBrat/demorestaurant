@@ -15,10 +15,10 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "Must be NOT NULL")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Must be NOT NULL")
     private String location;
 
     @Column(name = "updated_at")
@@ -36,6 +36,10 @@ public class Restaurant {
     }
 
     public Restaurant() {
+    }
+
+    public Restaurant(Integer id) {
+        this.id = id.longValue();
     }
 
     public Long getId() {

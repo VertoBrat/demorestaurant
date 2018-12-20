@@ -5,6 +5,6 @@ import java.util.List;
 
 public class DataNotValidException extends RuntimeException {
     public DataNotValidException(List<String> errors) {
-        super("Не удалось записать данные. Ошибка в полях: " + errors);
+        super("Can't save your data, errors in fields: " + errors);
     }
 }

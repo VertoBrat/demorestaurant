@@ -23,12 +23,12 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RequestMapping(value = "/api", produces = "application/hal+json")
 public class MainController {
 
-    @Autowired
     private UserRepo userRepo;
 
     @Autowired
-    private RestaurantRepo restaurantRepo;
-
+    public MainController(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
 
     @GetMapping
     public Resources<String> all(@AuthenticationPrincipal User user) {

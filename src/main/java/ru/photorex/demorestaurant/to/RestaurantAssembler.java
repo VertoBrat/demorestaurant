@@ -27,15 +27,17 @@ public class RestaurantAssembler extends ResourceAssemblerSupport<Restaurant, Re
 
     @Override
     public RestaurantTo toResource(Restaurant restaurant) {
-        RestaurantTo resource = createResourceWithId(restaurant.getId(), restaurant);
-
-        if (hasAccessToVote()) {
-            resource.add(linkTo(methodOn(VoteController.class).add(restaurant.getId(),null, null)).withRel("add-vote"));
-        }
+        RestaurantTo resourceForUser = new RestaurantTo(restaurant);
 
         if (hasAccessToModify()) {
-            resource.add(linkTo(methodOn(RestaurantController.class).getDishesPerOneRestaurant(restaurant.getId())).withRel("last-dishes-per-restaurant"));
+            RestaurantTo resource = createResourceWithId(restaurant.getId(), restaurant);
+            resource.add(linkTo(methodOn(RestaurantController.class).getDishesPerOneRestaurant(restaurant.getId())).withRel("last-dishes-per-restaurant"),
+                    linkTo(methodOn(VoteController.class).add(restaurant.getId(),null, null)).withRel("add-vote"));
+            return resource;
         }
-        return resource;
+        if (hasAccessToVote()) {
+            resourceForUser.add(linkTo(methodOn(VoteController.class).add(restaurant.getId(),null, null)).withRel("add-vote"));
+        }
+        return resourceForUser;
     }
 }

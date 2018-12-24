@@ -1,13 +1,13 @@
 package ru.photorex.demorestaurant.domain;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
+@Data
 @Entity
 @NoArgsConstructor
 public class Vote {
@@ -21,82 +21,18 @@ public class Vote {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @PrePersist
     public void init() {
         this.createdAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getRang() {
-        return rang;
-    }
-
-    public void setRang(int rang) {
-        this.rang = rang;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Vote)) return false;
-        Vote vote = (Vote) o;
-        return rang == vote.rang &&
-                Objects.equals(id, vote.id) &&
-                Objects.equals(createdAt, vote.createdAt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, rang, createdAt);
-    }
-
-    @Override
-    public String toString() {
-        return "Vote{" +
-                "id=" + id +
-                ", rang=" + rang +
-                ", createdAt=" + createdAt +
-                '}';
     }
 }

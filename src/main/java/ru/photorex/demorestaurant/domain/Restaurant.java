@@ -1,14 +1,16 @@
 package ru.photorex.demorestaurant.domain;
 
+import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+@Data
 @Entity
-@NamedEntityGraph(name = "Restaurant.dishes",
-        attributeNodes = @NamedAttributeNode("dishes"))
 public class Restaurant {
 
     @Id
@@ -24,9 +26,11 @@ public class Restaurant {
     @Column(name = "updated_at")
     private LocalDate updatedAt;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "restaurant")
     private List<Dish> dishes;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "restaurant")
     private Set<Vote> votes;
 
@@ -40,53 +44,5 @@ public class Restaurant {
 
     public Restaurant(Integer id) {
         this.id = id.longValue();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public LocalDate getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDate updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public List<Dish> getDishes() {
-        return dishes;
-    }
-
-    public void setDishes(List<Dish> dishes) {
-        this.dishes = dishes;
-    }
-
-    public Set<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(Set<Vote> votes) {
-        this.votes = votes;
     }
 }

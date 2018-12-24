@@ -1,18 +1,12 @@
 package ru.photorex.demorestaurant.to;
 
-import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import ru.photorex.demorestaurant.domain.Dish;
 import ru.photorex.demorestaurant.web.DishController;
 import ru.photorex.demorestaurant.web.RestaurantController;
 import ru.photorex.demorestaurant.web.UserController;
-import ru.photorex.demorestaurant.web.VoteController;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -25,8 +19,8 @@ public class RestaurantProcessor {
     public <T> Resources<T> addLinks(Resources<T> resources) {
         if (hasAccessToModify()) {
             resources.add(linkTo(methodOn(RestaurantController.class).create(null, null)).withRel("add"),
-                          linkTo(methodOn(RestaurantController.class).delete(null)).withRel("delete"),
-                          linkTo(methodOn(RestaurantController.class).update(null, null)).withRel("update"));
+                    linkTo(methodOn(RestaurantController.class).delete(null)).withRel("delete"),
+                    linkTo(methodOn(RestaurantController.class).update(null, null)).withRel("update"));
         }
 
         if (!hasAccessToVote()) {

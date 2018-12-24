@@ -8,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,7 +17,6 @@ import ru.photorex.demorestaurant.domain.Restaurant;
 import ru.photorex.demorestaurant.service.RestaurantService;
 import ru.photorex.demorestaurant.to.*;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import static ru.photorex.demorestaurant.util.DataValidation.*;
 
 import javax.validation.Valid;
@@ -49,7 +47,7 @@ public class RestaurantController {
     @GetMapping
     public ResponseEntity<?> getPaged(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                       @RequestParam(value = "day", required = false)
-                                      LocalDate date,
+                                              LocalDate date,
                                       Pageable pageable,
                                       PagedResourcesAssembler<Restaurant> assembler) {
 

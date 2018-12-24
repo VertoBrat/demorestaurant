@@ -5,9 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.photorex.demorestaurant.domain.Restaurant;
 import ru.photorex.demorestaurant.domain.Vote;
 
-
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Repository

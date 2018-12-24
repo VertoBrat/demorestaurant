@@ -107,10 +107,10 @@ public class RestaurantService {
 
     private void prepareData(Restaurant r, LocalDate date) {
         if (date != null) {
-        r.setVotes(voteRepo.findByRestaurantAndCreatedAtBetween(r,
-                LocalDateTime.of(date, LocalTime.MIDNIGHT),
-                LocalDateTime.of(date, LocalTime.MAX)));
-        return;
+            r.setVotes(voteRepo.findByRestaurantAndCreatedAtBetween(r,
+                    LocalDateTime.of(date, LocalTime.MIDNIGHT),
+                    LocalDateTime.of(date, LocalTime.MAX)));
+            return;
         }
         r.setVotes(voteRepo.findAllByRestaurant(r));
     }
@@ -123,7 +123,7 @@ public class RestaurantService {
 
     public Page<Restaurant> getAll(Pageable pageable) {
         Page<Restaurant> allPagedRestaurants = restaurantRepo.findAll(pageable);
-        allPagedRestaurants.forEach(r->prepareData(r,null));
+        allPagedRestaurants.forEach(r -> prepareData(r, null));
         return allPagedRestaurants;
     }
 }

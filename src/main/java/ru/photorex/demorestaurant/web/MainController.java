@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.hateoas.Resources;
 import ru.photorex.demorestaurant.excp.UserNotFoundException;
-import ru.photorex.demorestaurant.repo.RestaurantRepo;
 import ru.photorex.demorestaurant.repo.UserRepo;
 
 import java.util.Collections;
@@ -39,7 +38,7 @@ public class MainController {
         }
         ru.photorex.demorestaurant.domain.User domainUser =
                 userRepo.getByUserName(user.getUsername())
-                        .orElseThrow(()->new UserNotFoundException(user.getUsername()));
+                        .orElseThrow(() -> new UserNotFoundException(user.getUsername()));
 
         if (domainUser.getRoles().size() == 2) {
             return new Resources<String>(Collections.EMPTY_LIST,
@@ -49,8 +48,8 @@ public class MainController {
                     linkTo(methodOn(UserController.class).createAdmin(null, null)).withRel("register-new-admin"));
         }
 
-            return new Resources<String>(Collections.EMPTY_LIST,
-                    linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actual-restaurants"));
+        return new Resources<String>(Collections.EMPTY_LIST,
+                linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actual-restaurants"));
 
     }
 }

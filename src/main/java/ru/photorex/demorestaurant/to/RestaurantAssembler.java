@@ -4,7 +4,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import static ru.photorex.demorestaurant.util.AccessUtil.hasAccessToModify;
 import static ru.photorex.demorestaurant.util.AccessUtil.hasAccessToVote;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -32,11 +31,11 @@ public class RestaurantAssembler extends ResourceAssemblerSupport<Restaurant, Re
         if (hasAccessToModify()) {
             RestaurantTo resource = createResourceWithId(restaurant.getId(), restaurant);
             resource.add(linkTo(methodOn(RestaurantController.class).getDishesPerOneRestaurant(restaurant.getId())).withRel("last-dishes-per-restaurant"),
-                    linkTo(methodOn(VoteController.class).add(restaurant.getId(),null, null)).withRel("add-vote"));
+                    linkTo(methodOn(VoteController.class).add(restaurant.getId(), null, null)).withRel("add-vote"));
             return resource;
         }
         if (hasAccessToVote()) {
-            resourceForUser.add(linkTo(methodOn(VoteController.class).add(restaurant.getId(),null, null)).withRel("add-vote"));
+            resourceForUser.add(linkTo(methodOn(VoteController.class).add(restaurant.getId(), null, null)).withRel("add-vote"));
         }
         return resourceForUser;
     }

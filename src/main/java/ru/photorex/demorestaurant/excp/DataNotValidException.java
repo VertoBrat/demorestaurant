@@ -1,6 +1,5 @@
 package ru.photorex.demorestaurant.excp;
 
-
 import java.util.List;
 
 public class DataNotValidException extends RuntimeException {

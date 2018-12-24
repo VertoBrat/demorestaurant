@@ -12,7 +12,7 @@ public class DataValidation {
         if (result.hasErrors()) {
             List<String> errorFields =
                     result.getFieldErrors().stream()
-                            .map(r -> String.valueOf(r.getField() +" " + r.getDefaultMessage()))
+                            .map(r -> String.valueOf(r.getField() + " " + r.getDefaultMessage()))
                             .collect(Collectors.toList());
             throw new DataNotValidException(errorFields);
         }

@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -38,8 +37,8 @@ public class DishController {
         PagedResources<DishTo> pagedResources = assembler.toResource(dishPage, dishAssembler);
         if (pagedResources.getMetadata().getTotalElements() > 0) {
             pagedResources.add(linkTo(methodOn(DishController.class).add(null, null, null)).withRel("add"),
-                               linkTo(methodOn(DishController.class).delete(null)).withRel("delete"),
-                               linkTo(methodOn(DishController.class).update(null, null)).withRel("update"));
+                    linkTo(methodOn(DishController.class).delete(null)).withRel("delete"),
+                    linkTo(methodOn(DishController.class).update(null, null)).withRel("update"));
         }
         return new ResponseEntity<>(pagedResources, HttpStatus.OK);
     }

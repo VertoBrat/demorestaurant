@@ -1,6 +1,7 @@
 package ru.photorex.demorestaurant.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -27,10 +28,12 @@ public class Restaurant {
     private LocalDate updatedAt;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "restaurant")
     private List<Dish> dishes;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "restaurant")
     private Set<Vote> votes;
 

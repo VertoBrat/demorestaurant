@@ -3,6 +3,7 @@ package ru.photorex.demorestaurant;
 import org.junit.Test;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -10,13 +11,12 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static ru.photorex.demorestaurant.HttpApiTestsUtil.getAllForAdmin;
-import static ru.photorex.demorestaurant.HttpApiTestsUtil.getResponseRestaurantsWithoutAuth;
+import static ru.photorex.demorestaurant.HttpApiTestsUtil.*;
 
 public class RestaurantHttpApiTests extends AbstractHttpApiTests {
 
     @Test
-    public void actualRestaurantsWithoutAuth() throws Exception {
+    public void withoutAuth() throws Exception {
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/restaurants"));
 
@@ -26,7 +26,7 @@ public class RestaurantHttpApiTests extends AbstractHttpApiTests {
     }
 
     @Test
-    public void actualRestaurantsWithAuth() throws Exception {
+    public void withAuth() throws Exception {
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/restaurants")
                 .header("Authorization", "Basic dXNlcjpwYXNzd29yZA==")
@@ -39,7 +39,7 @@ public class RestaurantHttpApiTests extends AbstractHttpApiTests {
     }
 
     @Test
-    public void actualRestaurantsWithAdminAuth() throws Exception {
+    public void withAdminAuth() throws Exception {
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/restaurants")
                 .header("Authorization", "Basic YWRtaW46YWRtaW4=")
@@ -50,14 +50,63 @@ public class RestaurantHttpApiTests extends AbstractHttpApiTests {
     }
 
     @Test
-    public void getAllRestaurantsForAdmin() throws Exception {
+    public void getAllForAdmin() throws Exception {
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/restaurants/all")
                 .header("Authorization", "Basic YWRtaW46YWRtaW4=")
                 .with(user(userDetailsService.loadUserByUsername("admin"))));
 
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json(getAllForAdmin()))
+                .andExpect(content().json(getForAdmin()))
                 .andDo(document("all-restaurants-for-admin"));
+    }
+
+    @Test
+    public void getFirstForAdmin() throws Exception {
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/restaurants/1")
+                .header("Authorization", "Basic YWRtaW46YWRtaW4=")
+                .with(user(userDetailsService.loadUserByUsername("admin"))));
+
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(getOneRestaurantForAdmin()))
+                .andDo(document("get-one-restaurant"));
+    }
+
+    @Test
+    public void add() throws Exception {
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
+                .post("/api/restaurants")
+                .header("Authorization", "Basic YWRtaW46YWRtaW4=")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getNewRestaurant())
+                .with(user(userDetailsService.loadUserByUsername("admin"))));
+
+        resultActions.andExpect(status().isOk())
+                .andDo(document("create-restaurant"));
+    }
+
+    @Test
+    public void update() throws Exception {
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
+                .patch("/api/restaurants/1")
+                .header("Authorization", "Basic YWRtaW46YWRtaW4=")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getUpdatedRestaurant())
+                .with(user(userDetailsService.loadUserByUsername("admin"))));
+
+        resultActions.andExpect(status().isOk())
+                .andDo(document("update-restaurant"));
+    }
+
+    @Test
+    public void delete() throws Exception {
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
+                .delete("/api/restaurants/1")
+                .header("Authorization", "Basic YWRtaW46YWRtaW4=")
+                .with(user(userDetailsService.loadUserByUsername("admin"))));
+
+        resultActions.andExpect(status().isNoContent())
+                .andDo(document("delete-restaurant"));
     }
 }

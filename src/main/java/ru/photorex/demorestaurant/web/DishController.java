@@ -26,10 +26,14 @@ import static ru.photorex.demorestaurant.util.DataValidation.*;
 @RequestMapping(path = "/api/dishes", produces = "application/json")
 public class DishController {
 
-    @Autowired
     private DishService dishService;
-    @Autowired
     private DishAssembler dishAssembler;
+
+    @Autowired
+    public DishController(DishService dishService, DishAssembler dishAssembler) {
+        this.dishService = dishService;
+        this.dishAssembler = dishAssembler;
+    }
 
     @GetMapping
     public ResponseEntity<?> all(Pageable pageable, PagedResourcesAssembler<Dish> assembler) {

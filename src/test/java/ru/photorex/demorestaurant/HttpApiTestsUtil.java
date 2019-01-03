@@ -563,8 +563,9 @@ public class HttpApiTestsUtil {
 
     public static String getNewDish() {
         return "{\n" +
-                "\t\"name\":\"meal\",\n" +
-                "\t\"price\":100\n" +
+                "\t\"name\":\"update\",\n" +
+                "\t\"price\":1000,\n" +
+                "\t\"restaurant\":2\n" +
                 "}";
     }
 

@@ -4,23 +4,28 @@ All changes in the database can only be done by admin.
 Links vary depending on which user requests information.
 You can use HAL-Browser for easy navigation through the app.
 Simply use `http://localhost:8080/browser/index.html` into your browser.
-###curl samples
-#
-####entry point
+
+CURL samples
+
+Entry point
 `curl 'http://localhost:8080/api' -i -X GET`
-####user entry point
+
+User entry point
 `curl 'http://localhost:8080/api' -i -u 'user:password' -X GET`
-####admin entry point
+
+Admin entry point
 `curl 'http://localhost:8080/api' -i -u 'admin:admin' -X GET`
-#
-####Receive all actual restaurants for current day without auth
+
+Receive all actual restaurants for current day without auth
 `curl 'http://localhost:8080/api/restaurants' -i -X GET`
-####with user auth
+
+with user auth
 `curl 'http://localhost:8080/api/restaurants' -i -u 'user:password' -X GET`
-####with admin auth
+
+with admin auth
 `curl 'http://localhost:8080/api/restaurants' -i -u 'admin:admin' -X GET`
-#
-####Registration new user
+
+Registration new user
 `curl 'http://localhost:8080/api/registration' -i -X POST \
      -H 'Content-Type: application/json;charset=UTF-8' \
      -d '{
@@ -28,7 +33,9 @@ Simply use `http://localhost:8080/browser/index.html` into your browser.
  	"password":"user1",
  	"email":"user1@mail.ru"
  }'`
-####Registration new admin(only by another admin)
+ 
+Registration new admin(only by another admin).
+
 `curl 'http://localhost:8080/api/registration/admin' -i -u 'admin:admin' -X POST \
      -H 'Content-Type: application/json;charset=UTF-8' \
      -d '{
@@ -36,8 +43,8 @@ Simply use `http://localhost:8080/browser/index.html` into your browser.
  	"password":"admin1",
  	"email":"admin1@mail.ru"
  }'`
-#
-####add votes
+ 
+Add votes.
 `curl 'http://localhost:8080/api/votes/1' -i -u 'user:password' -X POST \
      -H 'rank: 10'`
 
@@ -45,16 +52,18 @@ where `rank` - quantity of votes(may be integer)
 and `/votes/{id}` - id - number of restaurant.
 
 Auth user can vote many times between 00:00 and 11:00, and one time after 11:00.
-#
-##Only for Admin
-####Get all restaurants
+
+Only for Admin.
+
+Get all restaurants
 `curl 'http://localhost:8080/api/restaurants/all' -i -u 'admin:admin' -X GET`
-####Get one restaurant
+
+Get one restaurant
 `curl 'http://localhost:8080/api/restaurants/1' -i -u 'admin:admin' -X GET`
 
 where `/restaurants/{id}` - number of restaurant
 
-####Create restaurant
+Create restaurant
 `curl 'http://localhost:8080/api/restaurants' -i -u 'admin:admin' -X POST \
      -H 'Content-Type: application/json;charset=UTF-8' \
      -d '{
@@ -62,17 +71,17 @@ where `/restaurants/{id}` - number of restaurant
  	"location":"ChineMall"
  }'`
  
-####Update restaurant
+Update restaurant
 `curl 'http://localhost:8080/api/restaurants/1' -i -u 'admin:admin' -X PATCH \
      -H 'Content-Type: application/json;charset=UTF-8' \
      -d '{
  	"name":"Updated"
  }'`
  
-####Delete Restaurant(Cascade)
+Delete Restaurant(Cascade)
 `curl 'http://localhost:8080/api/restaurants/1' -i -u 'admin:admin' -X DELETE`
 
-####Add dish
+Add dish
 `curl 'http://localhost:8080/api/dishes/1' -i -u 'admin:admin' -X POST \
      -H 'Content-Type: application/json;charset=UTF-8' \
      -d '{
@@ -82,7 +91,7 @@ where `/restaurants/{id}` - number of restaurant
  
 where `/dishes/1` - number of restaurant
 
-####Update dish
+Update dish
 `curl 'http://localhost:8080/api/dishes/1' -i -u 'admin:admin' -X PATCH \
      -H 'Content-Type: application/json;charset=UTF-8' \
      -d '{
@@ -95,6 +104,6 @@ where `/dishes/1` - number of restaurant
  `price` - price of dish,
  `restaurant`-number of new restaurant
  
- ####Delete dish
+Delete dish
  `curl 'http://localhost:8080/api/dishes/1' -i -u 'admin:admin' -X DELETE`
  

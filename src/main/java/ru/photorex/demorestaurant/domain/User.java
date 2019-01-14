@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.springframework.security.core.GrantedAuthority;
 import ru.photorex.demorestaurant.util.PostgreSQLEnumType;
 
 import javax.persistence.*;
@@ -44,8 +45,13 @@ public class User {
     @Type(type = "enum")
     private Set<Role> roles = new HashSet<>();
 
-    public enum Role {
-        ROLE_USER, ROLE_ADMIN
+    public enum Role implements GrantedAuthority {
+        ROLE_USER, ROLE_ADMIN, ROLE_ANONYMOUS;
+
+        @Override
+        public String getAuthority() {
+            return null;
+        }
     }
 
     @ToString.Exclude

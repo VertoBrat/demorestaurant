@@ -10,7 +10,7 @@ import static ru.photorex.demorestaurant.domain.User.Role.ROLE_ANONYMOUS;
 public class AccessUtil {
     public static boolean hasAccessToVote() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return !auth.getAuthorities().contains(ROLE_ANONYMOUS);
+        return auth.getAuthorities().contains(ROLE_ANONYMOUS);
     }
 
     public static boolean hasAccessToModify() {

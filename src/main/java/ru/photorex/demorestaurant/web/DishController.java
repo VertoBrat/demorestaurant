@@ -40,9 +40,9 @@ public class DishController {
         Page<Dish> dishPage = dishService.getAll(pageable);
         PagedResources<DishTo> pagedResources = assembler.toResource(dishPage, dishAssembler);
         if (pagedResources.getMetadata().getTotalElements() > 0) {
-            pagedResources.add(linkTo(methodOn(DishController.class).add(null, null, null)).withRel("add"),
-                    linkTo(methodOn(DishController.class).delete(null)).withRel("delete"),
-                    linkTo(methodOn(DishController.class).update(null, null)).withRel("update"));
+            pagedResources.add(linkTo(methodOn(DishController.class).add(null, null, null)).withRel("add").withType("POST"),
+                    linkTo(methodOn(DishController.class).delete(null)).withRel("delete").withType("DELETE"),
+                    linkTo(methodOn(DishController.class).update(null, null)).withRel("update").withType("PATCH"));
         }
         return new ResponseEntity<>(pagedResources, HttpStatus.OK);
     }

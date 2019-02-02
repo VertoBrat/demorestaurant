@@ -18,13 +18,13 @@ public class RestaurantProcessor {
 
     public <T> Resources<T> addLinks(Resources<T> resources) {
         if (hasAccessToModify()) {
-            resources.add(linkTo(methodOn(RestaurantController.class).create(null, null)).withRel("add"),
-                    linkTo(methodOn(RestaurantController.class).delete(null)).withRel("delete"),
-                    linkTo(methodOn(RestaurantController.class).update(null, null)).withRel("update"));
+            resources.add(linkTo(methodOn(RestaurantController.class).create(null, null)).withRel("add").withType("POST"),
+                    linkTo(methodOn(RestaurantController.class).delete(null)).withRel("delete").withType("DELETE"),
+                    linkTo(methodOn(RestaurantController.class).update(null, null)).withRel("update").withType("PATCH"));
         }
 
         if (!hasAccessToVote()) {
-            resources.add(linkTo(methodOn(UserController.class).create(null, null)).withRel("register-new-user"));
+            resources.add(linkTo(methodOn(UserController.class).create(null, null)).withRel("register-new-user").withType("POST"));
         }
 
         return resources;
@@ -33,9 +33,9 @@ public class RestaurantProcessor {
     public Resource<RestaurantTo> addLinks(Resource<RestaurantTo> resource) {
         Long id = resource.getContent().findId();
         if (hasAccessToModify()) {
-            resource.add(linkTo(methodOn(DishController.class).add(id, null, null)).withRel("add-dish"),
-                    linkTo(methodOn(RestaurantController.class).delete(id)).withRel("delete"),
-                    linkTo(methodOn(RestaurantController.class).update(id, null)).withRel("update"));
+            resource.add(linkTo(methodOn(DishController.class).add(id, null, null)).withRel("add-dish").withType("POST"),
+                    linkTo(methodOn(RestaurantController.class).delete(id)).withRel("delete").withType("DELETE"),
+                    linkTo(methodOn(RestaurantController.class).update(id, null)).withRel("update").withType("PATCH"));
         }
 
         return resource;

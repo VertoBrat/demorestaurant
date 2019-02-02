@@ -31,11 +31,11 @@ public class RestaurantAssembler extends ResourceAssemblerSupport<Restaurant, Re
         if (hasAccessToModify()) {
             RestaurantTo resource = createResourceWithId(restaurant.getId(), restaurant);
             resource.add(linkTo(methodOn(RestaurantController.class).getDishesPerOneRestaurant(restaurant.getId())).withRel("last-dishes-per-restaurant"),
-                    linkTo(methodOn(VoteController.class).add(restaurant.getId(), null, null)).withRel("add-vote"));
+                    linkTo(methodOn(VoteController.class).add(restaurant.getId(), null, null)).withRel("add-vote").withType("POST"));
             return resource;
         }
         if (hasAccessToVote()) {
-            resourceForUser.add(linkTo(methodOn(VoteController.class).add(restaurant.getId(), null, null)).withRel("add-vote"));
+            resourceForUser.add(linkTo(methodOn(VoteController.class).add(restaurant.getId(), null, null)).withRel("add-vote").withType("POST"));
         }
         return resourceForUser;
     }

@@ -34,7 +34,7 @@ public class MainController {
         if (user == null) {
             return new Resources<String>(Collections.EMPTY_LIST,
                     linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actual-restaurants"),
-                    linkTo(methodOn(UserController.class).create(null, null)).withRel("register-new-user"));
+                    linkTo(methodOn(UserController.class).create(null, null)).withRel("register-new-user").withType("POST"));
         }
         ru.photorex.demorestaurant.domain.User domainUser =
                 userRepo.getByUserName(user.getUsername())
@@ -45,7 +45,7 @@ public class MainController {
                     linkTo(methodOn(RestaurantController.class).all(null, null)).withRel("restaurants"),
                     linkTo(methodOn(RestaurantController.class).getPaged(now(), null, null)).withRel("actual-restaurants"),
                     linkTo(methodOn(DishController.class).all(null, null)).withRel("dishes"),
-                    linkTo(methodOn(UserController.class).createAdmin(null, null)).withRel("register-new-admin"));
+                    linkTo(methodOn(UserController.class).createAdmin(null, null)).withRel("register-new-admin").withType("POST"));
         }
 
         return new Resources<String>(Collections.EMPTY_LIST,

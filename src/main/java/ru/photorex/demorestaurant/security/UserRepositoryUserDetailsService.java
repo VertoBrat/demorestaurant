@@ -29,7 +29,7 @@ public class UserRepositoryUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.getByUserName(username).orElseThrow(() -> new UsernameNotFoundException(username));
         return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
-                user.getRoles());
+                mapRolesToAuthorities(user.getRoles()));
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<User.Role> roles) {

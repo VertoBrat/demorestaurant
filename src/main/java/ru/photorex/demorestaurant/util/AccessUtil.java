@@ -15,6 +15,6 @@ public class AccessUtil {
 
     public static boolean hasAccessToModify() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth.getAuthorities().contains(ROLE_ADMIN);
+        return auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 }

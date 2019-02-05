@@ -73,12 +73,14 @@ public class DishService {
             oldDish.setPrice(dish.getPrice());
             isNew = true;
         }
-        if (dish.getCreatedAt() != null) {
-            oldDish.setCreatedAt(dish.getCreatedAt());
-            isNew = true;
-        }
         if (dish.getRestaurant() != null) {
             oldDish.setRestaurant(dish.getRestaurant());
+            isNew = true;
+        }
+        if (dish.getCreatedAt() != null) {
+            oldDish.setCreatedAt(dish.getCreatedAt());
+            Restaurant restaurant = oldDish.getRestaurant();
+            restaurant.init();
             isNew = true;
         }
 

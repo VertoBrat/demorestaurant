@@ -20,6 +20,8 @@ import ru.photorex.demorestaurant.to.DishAssembler;
 import ru.photorex.demorestaurant.to.DishTo;
 import ru.photorex.demorestaurant.web.DishController;
 
+import java.time.LocalDate;
+
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -79,8 +81,10 @@ public class DishService {
         }
         if (dish.getCreatedAt() != null) {
             oldDish.setCreatedAt(dish.getCreatedAt());
-            Restaurant restaurant = oldDish.getRestaurant();
-            restaurant.init();
+            if (dish.getCreatedAt() == LocalDate.now()) {
+                Restaurant restaurant = oldDish.getRestaurant();
+                restaurant.init();
+            }
             isNew = true;
         }
 

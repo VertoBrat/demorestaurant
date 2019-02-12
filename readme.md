@@ -17,6 +17,8 @@ All changes in the database can only be done by admin.
 Links vary depending on which user requests information.
 You can use HAL-Browser for easy navigation through the app.
 Simply use `http://localhost:8080/browser/index.html` into your browser.
+If you want see real project, go to `https://restaurantvoting.herokuapp.com`
+and use curl samples!
 
 CURL samples
 

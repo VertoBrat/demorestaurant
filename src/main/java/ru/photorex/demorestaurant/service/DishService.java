@@ -81,7 +81,7 @@ public class DishService {
         }
         if (dish.getCreatedAt() != null) {
             oldDish.setCreatedAt(dish.getCreatedAt());
-            if (dish.getCreatedAt() == LocalDate.now()) {
+            if (dish.getCreatedAt().isEqual(LocalDate.now())) {
                 Restaurant restaurant = oldDish.getRestaurant();
                 restaurant.init();
             }

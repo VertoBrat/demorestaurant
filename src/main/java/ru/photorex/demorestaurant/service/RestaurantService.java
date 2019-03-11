@@ -91,7 +91,7 @@ public class RestaurantService {
         if (restaurant.getDishes() != null)
             oldRestaurant.setDishes(restaurant.getDishes());
 
-        restaurantRepo.save(oldRestaurant);
+       // restaurantRepo.save(oldRestaurant);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

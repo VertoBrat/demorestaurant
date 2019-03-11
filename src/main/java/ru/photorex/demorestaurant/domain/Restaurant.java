@@ -29,7 +29,7 @@ public class Restaurant {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.PERSIST)
     private List<Dish> dishes;
 
     @ToString.Exclude

@@ -66,18 +66,18 @@ public class DishService {
     @CacheEvict(value = {"pagingRest"}, allEntries = true)
     public ResponseEntity<?> update(Long id, Dish dish) {
         Dish oldDish = dishRepo.findById(id).orElseThrow(() -> new DishNotFoundException(id));
-        boolean isNew = false;
+        boolean isModified = false;
         if (dish.getName() != null) {
             oldDish.setName(dish.getName());
-            isNew = true;
+            isModified = true;
         }
         if (dish.getPrice() != null) {
             oldDish.setPrice(dish.getPrice());
-            isNew = true;
+            isModified = true;
         }
         if (dish.getRestaurant() != null) {
             oldDish.setRestaurant(dish.getRestaurant());
-            isNew = true;
+            isModified = true;
         }
         if (dish.getCreatedAt() != null) {
             oldDish.setCreatedAt(dish.getCreatedAt());
@@ -85,11 +85,11 @@ public class DishService {
                 Restaurant restaurant = oldDish.getRestaurant();
                 restaurant.init();
             }
-            isNew = true;
+            isModified = true;
         }
 
-        if (isNew) {
-            dishRepo.save(oldDish);
+        if (isModified) {
+          //  dishRepo.save(oldDish);
             return new ResponseEntity<>(HttpStatus.OK);
         }
 

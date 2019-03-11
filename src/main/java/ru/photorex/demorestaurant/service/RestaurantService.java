@@ -73,9 +73,10 @@ public class RestaurantService {
         if (Objects.isNull(restaurant.getDishes())) {
             restaurant.setDishes(new ArrayList<>());
             restaurantRepo.save(restaurant);
-        } else
+        } else {
+            restaurant.getDishes().forEach(d->d.setRestaurant(restaurant));
             restaurantRepo.save(restaurant);
-
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

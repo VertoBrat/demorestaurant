@@ -69,15 +69,15 @@ public class RestaurantService {
 
     @Transactional
     @CacheEvict(value = "pagingRest", allEntries = true)
-    public ResponseEntity<?> create(Restaurant restaurant) {
-        if (Objects.isNull(restaurant.getDishes())) {
+    public Resource<RestaurantTo> create(Restaurant restaurant) {
+        if (Objects.isNull(restaurant.getDishes()))
             restaurant.setDishes(new ArrayList<>());
-            restaurantRepo.save(restaurant);
-        } else {
+        else
             restaurant.getDishes().forEach(d->d.setRestaurant(restaurant));
-            restaurantRepo.save(restaurant);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
+        restaurant.setVotes(new HashSet<>());
+        RestaurantTo r = restaurantAssembler.toResource(restaurantRepo.save(restaurant));
+
+        return new Resource<>(r);
     }
 
     @Transactional

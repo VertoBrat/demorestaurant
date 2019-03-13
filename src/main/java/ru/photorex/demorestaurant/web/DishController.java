@@ -53,7 +53,7 @@ public class DishController {
     }
 
     @PostMapping("/{restaurantId}")
-    public ResponseEntity<?> add(@PathVariable("restaurantId") Long restaurantId, @Valid @RequestBody Dish dish, BindingResult result) {
+    public Resource<DishTo> add(@PathVariable("restaurantId") Long restaurantId, @Valid @RequestBody Dish dish, BindingResult result) {
         checkErrors(result);
 
         return dishService.create(restaurantId, dish);

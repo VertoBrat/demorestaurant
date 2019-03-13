@@ -51,15 +51,14 @@ public class DishService {
 
     @Transactional
     @CacheEvict(value = {"pagingRest"}, allEntries = true)
-    public ResponseEntity<?> create(Long restaurantId, Dish dish) {
+    public Resource<DishTo> create(Long restaurantId, Dish dish) {
         Restaurant restaurant =
                 restaurantRepo.findById(restaurantId)
                         .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
         restaurant.init();
         dish.setRestaurant(restaurant);
-        dishRepo.save(dish);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        DishTo resource = new DishAssembler().toResource(dishRepo.save(dish));
+        return new Resource<>(resource);
     }
 
     @Transactional

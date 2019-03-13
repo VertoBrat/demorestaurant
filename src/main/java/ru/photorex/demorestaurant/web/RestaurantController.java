@@ -80,7 +80,7 @@ public class RestaurantController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody Restaurant restaurant, BindingResult result) {
+    public Resource<RestaurantTo> create(@Valid @RequestBody Restaurant restaurant, BindingResult result) {
         checkErrors(result);
         return restaurantService.create(restaurant);
     }

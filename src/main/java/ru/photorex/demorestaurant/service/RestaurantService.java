@@ -100,7 +100,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    @CacheEvict(value = "pagingRest", allEntries = true)
+    @CacheEvict(value = {"pagingRest","votes"}, allEntries = true)
     public ResponseEntity<?> delete(Long id) {
         Restaurant restaurant = restaurantRepo.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));

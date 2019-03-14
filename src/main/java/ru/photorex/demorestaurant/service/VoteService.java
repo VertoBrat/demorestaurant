@@ -1,6 +1,7 @@
 package ru.photorex.demorestaurant.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class VoteService {
     }
 
     @Transactional
+    @CacheEvict(value = "votes", allEntries = true)
     public ResponseEntity<?> add(Restaurant restaurant, User user, int rank) {
         LocalDateTime now = LocalDateTime.now();
         Vote v = getByUserId(user.getId());

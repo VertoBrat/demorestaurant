@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.photorex.demorestaurant.domain.Dish;
 import ru.photorex.demorestaurant.domain.Restaurant;
 
+import ru.photorex.demorestaurant.domain.Vote;
 import ru.photorex.demorestaurant.excp.RestaurantNotFoundException;
 import ru.photorex.demorestaurant.excp.RestaurantNotFoundNewDishException;
 import ru.photorex.demorestaurant.repo.DishRepo;
@@ -25,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -73,7 +75,7 @@ public class RestaurantService {
         if (Objects.isNull(restaurant.getDishes()))
             restaurant.setDishes(new ArrayList<>());
         else
-            restaurant.getDishes().forEach(d->d.setRestaurant(restaurant));
+            restaurant.getDishes().forEach(d -> d.setRestaurant(restaurant));
         restaurant.setVotes(new HashSet<>());
         RestaurantTo r = restaurantAssembler.toResource(restaurantRepo.save(restaurant));
 
@@ -92,7 +94,7 @@ public class RestaurantService {
         if (restaurant.getDishes() != null)
             oldRestaurant.setDishes(restaurant.getDishes());
 
-       // restaurantRepo.save(oldRestaurant);
+        // restaurantRepo.save(oldRestaurant);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -106,25 +108,31 @@ public class RestaurantService {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private void prepareData(Restaurant r, LocalDate date) {
-        if (date != null) {
-            r.setVotes(voteRepo.findByRestaurantAndCreatedAtBetween(r,
-                    LocalDateTime.of(date, LocalTime.MIDNIGHT),
-                    LocalDateTime.of(date, LocalTime.MAX)));
-            return;
-        }
-        r.setVotes(voteRepo.findAllByRestaurant(r));
+    private void prepareData(Restaurant r, List<Vote> votes) {
+
+            r.setVotes(votes.stream().
+                    filter(v -> v.getRestaurant().equals(r))
+                    .collect(Collectors.toSet()));
+
+    }
+
+    private List<Vote> getVotes(LocalDate date) {
+        if (date == null) return voteRepo.findAll();
+        return voteRepo.findAllByCreatedAtBetween(LocalDateTime.of(date, LocalTime.MIDNIGHT),
+                        LocalDateTime.of(date, LocalTime.MAX));
     }
 
     public Page<Restaurant> getPaging(LocalDate ld, Pageable pageable) {
         Page<Restaurant> pagedRestaurants = restaurantRepo.getPaged(ld, pageable);
-        pagedRestaurants.forEach(r -> prepareData(r, ld));
+        List<Vote> votes = getVotes(ld);
+        pagedRestaurants.forEach(r -> prepareData(r, votes));
         return pagedRestaurants;
     }
 
     public Page<Restaurant> getAll(Pageable pageable) {
         Page<Restaurant> allPagedRestaurants = restaurantRepo.findAll(pageable);
-        allPagedRestaurants.forEach(r -> prepareData(r, null));
+        List<Vote> votes = getVotes(null);
+        allPagedRestaurants.forEach(r -> prepareData(r, votes));
         return allPagedRestaurants;
     }
 }

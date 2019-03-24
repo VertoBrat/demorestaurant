@@ -13,6 +13,11 @@ public class UserAssembler extends ResourceAssemblerSupport<User, UserTo> {
     }
 
     @Override
+    protected UserTo instantiateResource(User entity) {
+        return new UserTo(entity);
+    }
+
+    @Override
     public UserTo toResource(User entity) {
         return new UserTo(entity);
     }

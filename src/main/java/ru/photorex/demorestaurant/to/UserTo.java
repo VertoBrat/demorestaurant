@@ -7,7 +7,7 @@ import ru.photorex.demorestaurant.domain.User;
 
 import java.util.Set;
 
-@Relation(value = "users")
+@Relation(collectionRelation = "users")
 public class UserTo extends ResourceSupport {
 
     @Getter

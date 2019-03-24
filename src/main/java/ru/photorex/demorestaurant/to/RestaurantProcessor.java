@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import ru.photorex.demorestaurant.web.DishController;
 import ru.photorex.demorestaurant.web.RestaurantController;
-import ru.photorex.demorestaurant.web.UserController;
+import ru.photorex.demorestaurant.web.RegistrationController;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -24,7 +24,7 @@ public class RestaurantProcessor {
         }
 
         if (!hasAccessToVote()) {
-            resources.add(linkTo(methodOn(UserController.class).create(null, null)).withRel("register-new-user").withType("POST"));
+            resources.add(linkTo(methodOn(RegistrationController.class).create(null, null)).withRel("register-new-user").withType("POST"));
         }
 
         return resources;

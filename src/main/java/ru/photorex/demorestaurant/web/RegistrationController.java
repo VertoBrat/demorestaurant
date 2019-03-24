@@ -20,13 +20,13 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/registration")
-public class UserController {
+public class RegistrationController {
 
     private UserRepo userRepo;
     private PasswordEncoder encoder;
 
     @Autowired
-    public UserController(UserRepo userRepo, PasswordEncoder encoder) {
+    public RegistrationController(UserRepo userRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
         this.encoder = encoder;
     }

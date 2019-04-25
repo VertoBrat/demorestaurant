@@ -1,6 +1,5 @@
 package ru.photorex.demorestaurant.web;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,10 +20,14 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/api", produces = "application/hal+json")
-@AllArgsConstructor
 public class MainController {
 
     private UserRepo userRepo;
+
+    @Autowired
+    public MainController(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
 
     @GetMapping
     public Resources<String> all(@AuthenticationPrincipal User user) {

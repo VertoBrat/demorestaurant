@@ -1,6 +1,5 @@
 package ru.photorex.demorestaurant.web;
 
-import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
@@ -18,11 +17,15 @@ import ru.photorex.demorestaurant.to.UserTo;
 
 @RestController
 @RequestMapping("/api/users")
-@AllArgsConstructor
 public class UsersController {
 
     private UsersService usersService;
     private UserAssembler userAssembler;
+
+    public UsersController(UsersService usersService, UserAssembler userAssembler) {
+        this.usersService = usersService;
+        this.userAssembler = userAssembler;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAllPaged(Pageable pageable, PagedResourcesAssembler<User> assembler) {

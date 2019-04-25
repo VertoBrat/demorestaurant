@@ -1,6 +1,5 @@
 package ru.photorex.demorestaurant.web;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,13 +25,24 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping(path = "/api/restaurants", produces = "application/hal+json")
-@AllArgsConstructor
 public class RestaurantController {
 
     private RestaurantService restaurantService;
     private RestaurantAssembler restaurantAssembler;
     private RestaurantWithoutDishesAssembler restaurantWithoutDishesAssembler;
     private RestaurantProcessor restaurantProcessor;
+
+    @Autowired
+    public RestaurantController(RestaurantService restaurantService,
+                                RestaurantAssembler restaurantAssembler,
+                                RestaurantWithoutDishesAssembler restaurantWithoutDishesAssembler,
+                                RestaurantProcessor restaurantProcessor) {
+
+        this.restaurantService = restaurantService;
+        this.restaurantAssembler = restaurantAssembler;
+        this.restaurantWithoutDishesAssembler = restaurantWithoutDishesAssembler;
+        this.restaurantProcessor = restaurantProcessor;
+    }
 
     @GetMapping
     public ResponseEntity<?> getPaged(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

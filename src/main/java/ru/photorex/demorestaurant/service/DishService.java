@@ -1,6 +1,5 @@
 package ru.photorex.demorestaurant.service;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
@@ -28,11 +27,16 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Service
 @Transactional(readOnly = true)
-@AllArgsConstructor
 public class DishService {
 
     private RestaurantRepo restaurantRepo;
     private DishRepo dishRepo;
+
+    @Autowired
+    public DishService(RestaurantRepo restaurantRepo, DishRepo dishRepo) {
+        this.restaurantRepo = restaurantRepo;
+        this.dishRepo = dishRepo;
+    }
 
     public Page<Dish> getAll(Pageable pageable) {
         return dishRepo.findAll(pageable);

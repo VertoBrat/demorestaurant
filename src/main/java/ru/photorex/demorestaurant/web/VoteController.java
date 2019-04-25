@@ -1,5 +1,6 @@
 package ru.photorex.demorestaurant.web;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,18 +18,12 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/votes")
+@AllArgsConstructor
 public class VoteController {
 
     private VoteService voteService;
     private RestaurantRepo restaurantRepo;
     private UserRepo userRepo;
-
-    @Autowired
-    public VoteController(VoteService voteService, RestaurantRepo restaurantRepo, UserRepo userRepo) {
-        this.voteService = voteService;
-        this.restaurantRepo = restaurantRepo;
-        this.userRepo = userRepo;
-    }
 
     @PostMapping("/{restaurantId}")
     public ResponseEntity<?> add(@PathVariable Long restaurantId,

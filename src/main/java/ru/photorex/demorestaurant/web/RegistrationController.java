@@ -1,5 +1,6 @@
 package ru.photorex.demorestaurant.web;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +21,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/registration")
+@AllArgsConstructor
 public class RegistrationController {
 
     private UserRepo userRepo;
     private PasswordEncoder encoder;
-
-    @Autowired
-    public RegistrationController(UserRepo userRepo, PasswordEncoder encoder) {
-        this.userRepo = userRepo;
-        this.encoder = encoder;
-    }
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody User user, BindingResult result) {

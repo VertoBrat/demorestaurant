@@ -1,5 +1,6 @@
 package ru.photorex.demorestaurant.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
@@ -34,20 +35,13 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Service
 @Transactional(readOnly = true)
+@AllArgsConstructor
 public class RestaurantService {
 
     private DishRepo dishRepo;
     private RestaurantRepo restaurantRepo;
     private VoteRepo voteRepo;
     private RestaurantAssembler restaurantAssembler;
-
-    @Autowired
-    public RestaurantService(DishRepo dishRepo, RestaurantRepo restaurantRepo, VoteRepo voteRepo, RestaurantAssembler restaurantAssembler) {
-        this.dishRepo = dishRepo;
-        this.restaurantRepo = restaurantRepo;
-        this.voteRepo = voteRepo;
-        this.restaurantAssembler = restaurantAssembler;
-    }
 
     public Resources<DishTo> getLastDishesPerOneRestaurant(Long id) {
         Restaurant restaurant = restaurantRepo.findByIdAndUpdatedAt(id, LocalDate.now())

@@ -1,5 +1,6 @@
 package ru.photorex.demorestaurant.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Resource;
@@ -18,15 +19,11 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Service
 @Transactional(readOnly = true)
+@AllArgsConstructor
 public class UsersService {
 
     private UserRepo userRepo;
     private UserAssembler userAssembler;
-
-    public UsersService(UserRepo userRepo, UserAssembler userAssembler) {
-        this.userRepo = userRepo;
-        this.userAssembler = userAssembler;
-    }
 
     public Page<User> getPaged(Pageable pageable) {
         return userRepo.getPaged(pageable);

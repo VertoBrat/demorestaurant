@@ -1,5 +1,6 @@
 package ru.photorex.demorestaurant.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
@@ -18,14 +19,10 @@ import java.time.LocalTime;
 
 @Service
 @Transactional(readOnly = true)
+@AllArgsConstructor
 public class VoteService {
 
     private VoteRepo voteRepo;
-
-    @Autowired
-    public VoteService(VoteRepo voteRepo) {
-        this.voteRepo = voteRepo;
-    }
 
     @Transactional
     public ResponseEntity<?> save(Vote vote) {

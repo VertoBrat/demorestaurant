@@ -1,5 +1,6 @@
 package ru.photorex.demorestaurant.web;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,16 +25,11 @@ import static ru.photorex.demorestaurant.util.DataValidation.*;
 
 @RestController
 @RequestMapping(path = "/api/dishes", produces = "application/json")
+@AllArgsConstructor
 public class DishController {
 
     private DishService dishService;
     private DishAssembler dishAssembler;
-
-    @Autowired
-    public DishController(DishService dishService, DishAssembler dishAssembler) {
-        this.dishService = dishService;
-        this.dishAssembler = dishAssembler;
-    }
 
     @GetMapping
     public ResponseEntity<?> all(Pageable pageable, PagedResourcesAssembler<Dish> assembler) {

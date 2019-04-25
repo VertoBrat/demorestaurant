@@ -1,8 +1,6 @@
 package ru.photorex.demorestaurant.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +18,8 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @TypeDef(name = "enum", typeClass = PostgreSQLEnumType.class)
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -58,16 +58,6 @@ public class User {
     @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Vote> votes;
-
-    public User() {
-    }
-
-    public User(String userName, String encode, String email, Set<Role> objects) {
-        this.userName = userName;
-        this.password = encode;
-        this.email = email;
-        this.roles = objects;
-    }
 
     @PrePersist
     private void initRole() {

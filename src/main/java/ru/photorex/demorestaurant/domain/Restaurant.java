@@ -2,6 +2,7 @@ package ru.photorex.demorestaurant.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Restaurant {
 
     @Id
@@ -40,9 +42,6 @@ public class Restaurant {
     @PrePersist
     public void init() {
         this.updatedAt = LocalDate.now();
-    }
-
-    public Restaurant() {
     }
 
     public Restaurant(Integer id) {

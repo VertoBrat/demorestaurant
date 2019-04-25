@@ -2,6 +2,7 @@ package ru.photorex.demorestaurant.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @BatchSize(size = 5)
+@NoArgsConstructor
 public class Dish {
 
     @Id
@@ -38,8 +40,5 @@ public class Dish {
     @PrePersist
     private void init() {
         this.createdAt = LocalDate.now();
-    }
-
-    public Dish() {
     }
 }

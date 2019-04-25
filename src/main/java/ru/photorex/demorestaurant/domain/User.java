@@ -50,7 +50,7 @@ public class User {
 
         @Override
         public String getAuthority() {
-            return name();
+            return null;
         }
     }
 

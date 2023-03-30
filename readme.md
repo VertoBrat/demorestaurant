@@ -1,4 +1,4 @@
-**REST API application**  
+**REST API application**   
 
 A voting system for deciding where to have lunch.
 
